@@ -1,0 +1,108 @@
+name: soda-orders-quality-minerva
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+description: Applying quality checks for the orders data
+workspace: public
+
+workflow:
+  # schedule:
+  #   cron: '00 08 * * *'
+  #   concurrencyPolicy: Forbid
+
+  dag:
+    - name: soda-orders-quality
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+
+        stackSpec:
+          inputs:
+            - dataset: dataos://sujathadepot:public/orders
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate schema for orders dataset
+                    fail:
+                      when wrong column type:
+                        order_id: integer
+                        customer_id: integer
+                        product_name: varchar
+                        amount: double
+                        order_status: varchar
+                        order_time: date
+                    attributes:
+                      category: Schema
+
+                - missing_count(order_id) = 0:
+                    name: Order ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - duplicate_count(order_id) = 0:
+                    name: Order ID should not be duplicated
+                    attributes:
+                      category: Uniqueness
+
+                - invalid_count(order_id) = 0:
+                    name: Order ID should be greater than zero
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - missing_count(customer_id) = 0:
+                    name: Customer ID should not be missing in orders
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(customer_id) = 0:
+                    name: Customer ID in orders should be greater than zero
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - missing_count(product_name) = 0:
+                    name: Product name should not be missing
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(amount) = 0:
+                    name: Order amount should not be negative
+                    valid min: 0
+                    attributes:
+                      category: Validity
+
+                - invalid_count(order_status) = 0:
+                    name: Order status should be valid
+                    valid values:
+                      - pending
+                      - completed
+                      - shipped
+                      - cancelled
+                    attributes:
+                      category: Validity
+
+                - freshness(order_time) < 3650d:
+                    name: Order date should be reasonably recent
+                    attributes:
+                      category: Freshness
+
+                - avg_length(product_name) > 2:
+                    name: Average length of product name should be greater than 2
+                    attributes:
+                      category: Accuracy

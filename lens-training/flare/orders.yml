@@ -1,0 +1,49 @@
+name: wf-orders-data
+version: v1
+type: workflow
+tags:
+- crm
+description: Ingesting  order data in lakehouse
+workflow:
+  dag:
+   - name: dg-order-data
+     spec:
+       tags:
+         - crm
+       stack: flare:7.0
+       compute: runnable-default
+       stackSpec:
+         driver:
+           coreLimit: 2000m
+           cores: 1
+           memory: 2000m
+         executor:
+           coreLimit: 2000m
+           cores: 1
+           instances: 1
+           memory: 2000m
+         job:
+           explain: true
+           logLevel: INFO
+           inputs:
+             - name: order_data
+               dataset: dataos://thirdparty01:csv_files/orders.csv?acl=rw
+               format: csv
+               options:
+                 inferSchema: true
+           steps:
+             - sequence:
+                 - name: final
+                   sql: >
+                     SELECT 
+                       * 
+                     FROM order_data
+           outputs:
+             - name: final
+               dataset: dataos://sujathadepot:public/orders?acl=rw 
+               # Replace abc with your initials
+               driver: org.postgresql.Driver
+               format: jdbc
+               title: order Dataset
+               options:
+                 saveMode: overwrite

@@ -1,0 +1,45 @@
+version: v1beta
+name: customer360-bundle
+type: bundle
+tags:
+  - dataproduct
+  - customer360
+  - postgres
+description: Bundle for customer 360 demo with depot, scanner, flare, and soda
+layer: user
+
+bundle:
+  resources:
+
+    - id: customer360depot
+      file: /home/svsujatha/Pictures/Training/depot/sujathadepot.yml
+
+    - id: customer360scanner
+      file: /home/svsujatha/Pictures/Training/depot/depot-scanner.yml
+      dependencies:
+        - customer360depot
+      dependencyConditions:
+        - resourceId: customer360depot
+          status:
+            is:
+              - active
+
+    - id: customer360flare
+      file: /home/svsujatha/Pictures/Training/flare/customer360.yml
+      dependencies:
+        - customer360depot
+      dependencyConditions:
+        - resourceId: customer360depot
+          status:
+            is:
+              - active
+
+    - id: customer360soda
+      file: /home/svsujatha/Pictures/Training/flare/customer360-soda.yml
+      dependencies:
+        - customer360flare
+      dependencyConditions:
+        - resourceId: customer360flare
+          status:
+            is:
+              - active

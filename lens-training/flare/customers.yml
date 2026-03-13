@@ -1,0 +1,49 @@
+name: wf-customers-data
+version: v1
+type: workflow
+tags:
+- crm
+description: Ingesting  customer data in lakehouse
+workflow:
+  dag:
+   - name: dg-customer-data
+     spec:
+       tags:
+         - crm
+       stack: flare:7.0
+       compute: runnable-default
+       stackSpec:
+         driver:
+           coreLimit: 2000m
+           cores: 1
+           memory: 2000m
+         executor:
+           coreLimit: 2000m
+           cores: 1
+           instances: 1
+           memory: 2000m
+         job:
+           explain: true
+           logLevel: INFO
+           inputs:
+             - name: customer_data
+               dataset: dataos://thirdparty01:csv_files/customers.csv?acl=rw
+               format: csv
+               options:
+                 inferSchema: true
+           steps:
+             - sequence:
+                 - name: final
+                   sql: >
+                     SELECT 
+                       * 
+                     FROM customer_data
+           outputs:
+             - name: final
+               dataset: dataos://sujathadepot:public/customers?acl=rw 
+               # Replace abc with your initials
+               driver: org.postgresql.Driver
+               format: jdbc
+               title: customer Dataset
+               options:
+                 saveMode: overwrite
