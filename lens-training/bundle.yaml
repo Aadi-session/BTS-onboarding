@@ -1,0 +1,52 @@
+name: gcd-datagpt-bundle-v1
+version: v1beta
+type: bundle
+tags:
+  - dataproduct
+  - datagpt
+description: This bundle resource is for the gcd datagpt data product.
+layer: "user"
+bundle:
+  # workspaces:
+  #   - name: testing
+  #     description: "This workspace runs bundle resources for the gcd datagpt data product"
+  #     tags:
+  #       - dataproduct
+  #       - datagpt
+  #     labels:
+  #       name: "dataproductBundleResources"
+  #     layer: "user"
+      
+  resources:
+    # Lens Yaml  
+    - id: lens
+      file: ./deployment.yaml
+      workspace: testing
+
+
+    
+    - id: profile
+      file: ./bundle/profiling/profiling_all_base_table.yaml
+      workspace: testing
+      dependencies:
+        - lens
+      dependencyConditions:
+        - resourceId: lens
+          status:
+            is:
+              - active
+
+    # Quality Yamls
+    - id: quality
+      file: ./bundle/quality.yaml
+      workspace: testing
+      dependencies:
+        - profile
+      dependencyConditions:
+        - resourceId: profile
+          status:
+            is:
+              - active
+          runtime:
+            is:
+              - succeeded
