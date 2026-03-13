@@ -8,7 +8,7 @@ description: This semantic model provides comprehensive insights for customer360
 lens:
   compute: runnable-default
   secrets:
-    - name: bitbucket-cred
+    - name: bitbucket-sv
       allKeys: true
   source:
     type: minerva # minerva, themis and depot
@@ -16,7 +16,7 @@ lens:
     catalog: sujathadepot
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: BTS-onboarding/data-product/consumer-aligned/model
+    lensBaseDir: BTS-onboarding/lens-training/data-product/consumer-aligned/model
     syncFlags:
       - --ref=main
 
