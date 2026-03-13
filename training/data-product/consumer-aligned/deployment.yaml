@@ -16,7 +16,7 @@ lens:
     catalog: sujathadepot
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: BTS-onboarding/lens-training/data-product/consumer-aligned/model
+    lensBaseDir: BTS-onboarding/training/data-product/consumer-aligned/model
     syncFlags:
       - --ref=main
 
