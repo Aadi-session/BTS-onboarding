@@ -2,7 +2,7 @@ tables:
   - name: customer_360_dataset
     sql: {{ load_sql('customer_360_dataset') }}
     description: Unified customer 360 dataset combining customer profile details, order transactions, and customer interaction events into a single source for analytics and reporting.
-    data_source: lakehouse
+    data_source: icebase
     public: true
 
     dimensions:
