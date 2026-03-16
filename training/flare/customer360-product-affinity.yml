@@ -1,0 +1,56 @@
+version: v1
+name: wf-customer-product-affinity
+type: workflow
+tags:
+  - analytics
+description: Build the product affinity matrix from the customer_360_dataset.
+workflow:
+  dag:
+    - name: dg-customer-360-product-affinity
+      spec:
+        tags:
+          - analytics
+        stack: flare:7.0
+        compute: runnable-default
+        stackSpec:
+          job:
+            explain: true
+            inputs:
+              - name: customer_data
+                dataset: dataos://icebase:sujathaschema/customer_360_dataset?acl=r
+                format: Iceberg
+            outputs:
+              - name: product_affinity
+                dataset: dataos://icebase:sujathaschema/product_affinity_matrix?acl=rw
+                format: Iceberg
+                title: Product affinity matrix
+                options:
+                  saveMode: overwrite
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+            steps:
+              - sequence:
+                  - name: affinity_view
+                    sql: >
+                      SELECT
+                        customer_id,
+                        order_id,
+                        product_name
+                      FROM customer_data
+                      WHERE customer_id IS NOT NULL
+                        AND order_id IS NOT NULL
+                        AND product_name IS NOT NULL
+
+                  - name: product_affinity
+                    sql: >
+                      SELECT
+                        a.product_name AS product_1,
+                        b.product_name AS product_2,
+                        COUNT(*) AS product_affinity_score
+                      FROM affinity_view a
+                      JOIN affinity_view b
+                        ON a.order_id = b.order_id
+                      AND a.product_name < b.product_name
+                      GROUP BY a.product_name, b.product_name
+                      ORDER BY product_affinity_score DESC

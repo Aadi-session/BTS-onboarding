@@ -1,0 +1,53 @@
+name: customer360analysis
+version: v1beta
+entity: product
+type: data
+tags:
+  - DPDomain.Marketing
+  - DPUsecase.Customer Segmentation
+  - DPUsecase.Product Recommendation
+  - DPTier.Consumer Aligned
+description: Identifies cross-sell opportunities through product affinity analysis, improving recommendations by understanding product relationships.
+refs:
+  - title: 'Workspace Info'
+    href: https://dataos.info/interfaces/cli/command_reference/#workspace
+
+v1beta:
+  data:
+    meta:
+      title: Customer 360 Analysis
+      sourceCodeUrl: https://github.com/Aadi-session/BTS-onboarding/blob/main/
+      trackerUrl: https://rubikai.atlassian.net/browse
+ 
+    collaborators:
+      - name: manishagrawal
+        description: owner
+      - name: sanduvenkatasujatha
+        description: developer
+      - name: aadityasoni
+        description: consumer
+
+    resource:
+      refType: dataos
+      ref: bundle:v1beta:customeranalysis-bundle
+
+    inputs:
+      - refType: dataos
+        ref: dataos://icebase:sujathaschema/customer_360_dataset
+
+
+
+    outputs:
+      - refType: dataos
+        ref: dataset:icebase:sujathaschema:cross_sell_recommendations
+
+      - refType: dataos
+        ref: dataset:icebase:sujathaschema:product_affinity_matrix
+
+    ports:
+      lens:
+        ref: lens:v1alpha:customer360:public
+        refType: dataos
+
+     
+      

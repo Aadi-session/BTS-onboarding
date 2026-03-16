@@ -1,0 +1,18 @@
+name: customeranalysis-bundle
+version: v1beta
+type: bundle
+tags:
+  - dataproduct
+description: This bundle resource is for the customer360 data product.
+layer: "user"
+bundle:
+  resources:
+    - id: lens
+      file: /data-product/consumer-aligned/deployment.yaml
+      workspace: public
+
+    - id: quality-check
+      file: /flare/customer360-soda.yml
+      workspace: public
+
+    
