@@ -36,8 +36,4 @@ v1beta:
       - refType: dataos
         ref: dataset:icebase:sujathaschema:customer_360_dataset
 
-      # - refType: dataos
-      #   ref: dataset:sujathadepot:public:orders
 
-      # - refType: dataos
-      #   ref: dataset:sujathadepot:public:customer_events
