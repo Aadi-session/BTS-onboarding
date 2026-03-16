@@ -13,21 +13,6 @@ tables:
         primary_key: true
         public: true
 
-      - name: full_name
-        description: Full name of the customer.
-        type: string
-        sql: full_name
-
-      - name: email
-        description: Email address of the customer.
-        type: string
-        sql: email
-
-      - name: phone
-        description: Phone number of the customer.
-        type: number
-        sql: phone
-
       - name: city
         description: City associated with the customer.
         type: string
@@ -93,11 +78,6 @@ tables:
         type: time
         sql: event_time
 
-      - name: metadata
-        description: System metadata associated with the record.
-        type: string
-        sql: __metadata
-        public: false
 
     segments:
       - name: active_customers
