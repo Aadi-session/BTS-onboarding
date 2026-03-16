@@ -19,7 +19,7 @@ service:
   logLevel: DEBUG
   compute: runnable-default
   envs:
-    TALOS_SCHEMA_PATH: /BTS-onboarding/training1/activation/data-apis
+    TALOS_SCHEMA_PATH: /BTS-onboarding/training/activation/data-apis
     TALOS_BASE_PATH: /talos/public:customer-analytics-api
   resources:
     requests:
@@ -35,6 +35,6 @@ service:
   stackSpec:
     repo:
       url: https://github.com/Aadi-session/BTS-onboarding
-      projectDirectory: /BTS-onboarding/training1/activation/data-apis
+      projectDirectory: /BTS-onboarding/training/activation/data-apis
       syncFlags:
         - --ref=main

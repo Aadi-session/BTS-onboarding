@@ -12,10 +12,10 @@ bundle:
   resources:
 
     - id: customer360depot
-      file: /home/svsujatha/Pictures/Training/depot/sujathadepot.yml
+      file: /home/svsujatha/Pictures/BTS-onboarding/training/infra/postgres/sujathadepot.yml
 
     - id: customer360scanner
-      file: /home/svsujatha/Pictures/Training/depot/depot-scanner.yml
+      file: /home/svsujatha/Pictures/BTS-onboarding/training/infra/postgres/depot-scanner.yml
       dependencies:
         - customer360depot
       dependencyConditions:
@@ -25,7 +25,7 @@ bundle:
               - active
 
     - id: customer360flare
-      file: /home/svsujatha/Pictures/Training/flare/customer360.yml
+      file: /home/svsujatha/Pictures/BTS-onboarding/training/build/data-processing/customer360.yml
       dependencies:
         - customer360depot
       dependencyConditions:
@@ -34,12 +34,3 @@ bundle:
             is:
               - active
 
-    # - id: customer360soda
-    #   file: /home/svsujatha/Pictures/Training/flare/customer360-soda.yml
-    #   dependencies:
-    #     - customer360flare
-    #   dependencyConditions:
-    #     - resourceId: customer360flare
-    #       status:
-    #         is:
-    #           - active
