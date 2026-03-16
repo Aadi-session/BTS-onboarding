@@ -13,7 +13,7 @@ views:
         window: "week"
 
     tables:
-      - join_path: customer.events
+      - join_path: customer_360_dataset
         prefix: false
         includes:
           - event_time

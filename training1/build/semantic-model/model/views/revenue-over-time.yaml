@@ -13,7 +13,7 @@ views:
         window: "month"
 
     tables:
-      - join_path: customer.orders
+      - join_path: customer_360_dataset
         prefix: false
         includes:
           - order_time
