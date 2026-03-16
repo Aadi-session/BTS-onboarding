@@ -16,7 +16,7 @@ lens:
     catalog: sujathadepot
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: training/build/semantic-model/model
+    lensBaseDir: BTS-onboarding/training/build/semantic-model/model
     syncFlags:
       - --ref=main
 
