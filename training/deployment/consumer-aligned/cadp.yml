@@ -44,7 +44,7 @@ v1beta:
 
     ports:
       lens:
-        ref: lens:v1alpha:customer360:public
+        ref: lens:v1alpha:customerdata:public
         refType: dataos
 
       talos:

@@ -1,4 +1,4 @@
-name: "customer360"
+name: "customerdata"
 version: v1alpha
 layer: user
 type: lens
