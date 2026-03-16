@@ -16,7 +16,7 @@ lens:
     catalog: sujathadepot
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: BTS-onboarding/training1/data-product/consumer-aligned/model
+    lensBaseDir: BTS-onboarding/training1/build/semantic-model/deployment.yaml
     syncFlags:
       - --ref=main
 
