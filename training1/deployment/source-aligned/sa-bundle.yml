@@ -15,7 +15,7 @@ bundle:
       file: /home/svsujatha/Pictures/BTS-onboarding/training1/infra/postgres/sujathadepot.yml
 
     - id: customer360scanner
-      file: /home/svsujatha/Pictures/BTS-onboarding/training1/depot/depot-scanner.yml
+      file: /home/svsujatha/Pictures/BTS-onboarding/training1/infra/postgres/depot-scanner.yml
       dependencies:
         - customer360depot
       dependencyConditions:
