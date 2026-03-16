@@ -4,15 +4,14 @@ type: bundle
 tags:
   - dataproduct
 description: This bundle resource is for the customer360 data product.
-layer: "user"
+layer: user
+
 bundle:
   resources:
     - id: lens
-      file: /data-product/consumer-aligned/deployment.yaml
+      file: training/data-product/consumer-aligned/deployment.yaml
       workspace: public
 
     - id: quality-check
-      file: /flare/customer360-soda.yml
+      file: training/flare/customer360-soda.yml
       workspace: public
-
-    

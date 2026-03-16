@@ -28,14 +28,12 @@ v1beta:
         description: consumer
 
     resource:
-      refType: dataos
-      ref: bundle:v1beta:customeranalysis-bundle
+        refType: dataos
+        ref: bundle:v1beta:customeranalysis-bundle
 
     inputs:
       - refType: dataos
-        ref: dataos://icebase:sujathaschema/customer_360_dataset
-
-
+        ref: dataset:icebase:sujathaschema:customer_360_dataset
 
     outputs:
       - refType: dataos
@@ -48,6 +46,3 @@ v1beta:
       lens:
         ref: lens:v1alpha:customer360:public
         refType: dataos
-
-     
-      

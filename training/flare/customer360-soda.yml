@@ -5,7 +5,7 @@ tags:
   - workflow
   - soda-checks
 description: Applying quality checks for the customer 360 joined dataset
-workspace: sujatha
+workspace: public
 
 workflow:
   dag:
@@ -32,28 +32,28 @@ workflow:
                   - include *
               checks:
                 - schema:
-                  name: Validate expected schema for customer 360 dataset
-                  fail:
-                    when wrong column type:
-                      customer_id: integer
-                      full_name: varchar
-                      email: varchar
-                      phone: bigint
-                      city: varchar
-                      signup_date: date
-                      customer_status: varchar
-                      order_id: integer
-                      product_name: varchar
-                      amount: double
-                      order_status: varchar
-                      order_time: date
-                      event_id: integer
-                      event_type: varchar
-                      event_channel: varchar
-                      event_value: varchar
-                      event_time: date
-                  attributes:
-                    category: Schema
+                    name: Validate expected schema for customer 360 dataset
+                    fail:
+                      when wrong column type:
+                        customer_id: integer
+                        full_name: varchar
+                        email: varchar
+                        phone: bigint
+                        city: varchar
+                        signup_date: date
+                        customer_status: varchar
+                        order_id: integer
+                        product_name: varchar
+                        amount: double
+                        order_status: varchar
+                        order_time: date
+                        event_id: integer
+                        event_type: varchar
+                        event_channel: varchar
+                        event_value: varchar
+                        event_time: date
+                    attributes:
+                      category: Schema
 
                 - missing_count(customer_id) = 0:
                     name: Customer ID should not be missing
@@ -85,17 +85,7 @@ workflow:
                 - duplicate_count(customer_id) > 0:
                     name: Joined dataset can contain duplicate customer IDs due to multiple orders and events
                     attributes:
-                      category: Join Behavior
-
-                - missing_count(order_id) >= 0:
-                    name: Order ID can be null for customers with no orders
-                    attributes:
-                      category: Referential Integrity
-
-                - missing_count(event_id) >= 0:
-                    name: Event ID can be null for customers with no events
-                    attributes:
-                      category: Referential Integrity
+                      category: Uniqueness
 
                 - freshness(event_time) < 7d:
                     name: Customer events should be recent within 7 days
@@ -126,7 +116,7 @@ workflow:
                       category: Validity
 
                 - invalid_count(event_channel) = 0:
-                    name: Event channel should be web mobile or app
+                    name: Event channel should be web, mobile, or app
                     valid values:
                       - web
                       - mobile
