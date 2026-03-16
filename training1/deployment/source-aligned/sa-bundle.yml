@@ -34,12 +34,3 @@ bundle:
             is:
               - active
 
-    # - id: customer360soda
-    #   file: /home/svsujatha/Pictures/BTS-onboarding/training1/build/data-processing/customer360-soda.yml
-    #   dependencies:
-    #     - customer360flare
-    #   dependencyConditions:
-    #     - resourceId: customer360flare
-    #       status:
-    #         is:
-    #           - active

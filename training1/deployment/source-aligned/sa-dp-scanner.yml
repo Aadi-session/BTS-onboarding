@@ -22,4 +22,4 @@ workflow:
               markDeletedDataProducts: true
               dataProductFilterPattern:
                 includes:
-                 - customerdata360
+                  - customerdata360
