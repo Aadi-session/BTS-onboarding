@@ -13,5 +13,5 @@ bundle:
       workspace: public
 
     - id: quality-check
-      file: training/flare/customer360-soda.yml
+      file: training/flare/consumer-aligned/customer360-soda.yml
       workspace: public
