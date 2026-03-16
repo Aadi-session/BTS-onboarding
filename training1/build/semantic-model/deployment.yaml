@@ -1,5 +1,5 @@
 name: "customer360"
-version: v1
+version: v1alpha
 layer: user
 type: lens
 tags:
