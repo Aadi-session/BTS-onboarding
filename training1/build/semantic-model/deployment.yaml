@@ -1,4 +1,4 @@
-version: v1alpha
+version: v1
 name: "customer360"
 layer: user
 type: lens
@@ -16,7 +16,7 @@ lens:
     catalog: sujathadepot
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: BTS-onboarding/training1/build/semantic-model/model
+    lensBaseDir: training1/build/semantic-model/model
     syncFlags:
       - --ref=main
 
