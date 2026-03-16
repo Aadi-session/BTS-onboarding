@@ -1,0 +1,28 @@
+views:
+  - name: customer_engagement_over_time
+    description: Tracks customer engagement events over time across channels and funnel stages.
+    public: true
+    meta:
+      title: Customer Engagement Over Time
+      tags:
+        - DPDomain.Marketing
+        - DPTier.Consumer Aligned
+      metric:
+        expression: "0 */4 * * *"
+        timezone: "Asia/Kolkata"
+        window: "week"
+
+    tables:
+      - join_path: customer.events
+        prefix: false
+        includes:
+          - event_time
+          - event_type
+          - event_channel
+          - funnel_stage
+          - total_events
+          - add_to_cart_events
+          - checkout_events
+          - payment_success_events
+
+

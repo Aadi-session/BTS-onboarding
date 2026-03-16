@@ -1,0 +1,103 @@
+name: soda-customers-quality-minerva
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+description: Applying quality checks for the customers data
+workspace: public
+workflow:
+  # schedule:
+  #   cron: '00 08 * * *'
+  #   concurrencyPolicy: Forbid
+  dag:
+    - name: soda-customers-quality
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+
+        stackSpec:
+          inputs:
+            - dataset: dataos://sujathadepot:public/customers
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate schema for customers dataset
+                    fail:
+                      when wrong column type:
+                        customer_id: integer
+                        full_name: varchar
+                        email: varchar
+                        phone: bigint
+                        city: varchar
+                        signup_date: date
+                        status: varchar
+                    attributes:
+                      category: Schema
+
+                - missing_count(customer_id) = 0:
+                    name: Customer ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - duplicate_count(customer_id) = 0:
+                    name: Customer ID should not be duplicated
+                    attributes:
+                      category: Uniqueness
+
+                - invalid_count(customer_id) = 0:
+                    name: Customer ID should be greater than zero
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - missing_count(full_name) = 0:
+                    name: Customer name should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(email) = 0:
+                    name: Customer email should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(city) = 0:
+                    name: City should not be missing
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(status) = 0:
+                    name: Status should be active or inactive
+                    valid values:
+                      - active
+                      - inactive
+                    attributes:
+                      category: Validity
+
+                - freshness(signup_date) < 3650d:
+                    name: Signup date should be reasonably recent
+                    attributes:
+                      category: Freshness
+                
+                - avg_length(full_name) > 2:
+                    name: Average length of full name should be greater than 2
+                    attributes:
+                      category: Accuracy
+
+                - avg_length(city) > 2:
+                    name: Average length of city should be greater than 2
+                    attributes:
+                      category: Accuracy

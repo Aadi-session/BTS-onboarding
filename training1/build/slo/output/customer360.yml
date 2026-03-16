@@ -1,0 +1,126 @@
+name: soda-customer360-quality
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+description: Applying quality checks for the customer 360 joined dataset
+workspace: public
+
+workflow:
+  dag:
+    - name: soda-customer360-quality
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:sujathaschema/customer_360_dataset
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate expected schema for customer 360 dataset
+                    fail:
+                      when wrong column type:
+                        customer_id: integer
+                        full_name: varchar
+                        email: varchar
+                        phone: bigint
+                        city: varchar
+                        signup_date: date
+                        customer_status: varchar
+                        order_id: integer
+                        product_name: varchar
+                        amount: double
+                        order_status: varchar
+                        order_time: date
+                        event_id: integer
+                        event_type: varchar
+                        event_channel: varchar
+                        event_value: varchar
+                        event_time: date
+                    attributes:
+                      category: Schema
+
+                - missing_count(customer_id) = 0:
+                    name: Customer ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(full_name) = 0:
+                    name: Customer name should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(email) = 0:
+                    name: Customer email should not be missing
+                    attributes:
+                      category: Completeness
+
+                - valid_count(customer_id) > 0:
+                    name: Customer ID should be valid and greater than 0
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - valid_count(amount) > 0:
+                    name: Order amount should be valid and non-negative
+                    valid min: 0
+                    attributes:
+                      category: Validity
+
+                - duplicate_count(customer_id) > 0:
+                    name: Joined dataset can contain duplicate customer IDs due to multiple orders and events
+                    attributes:
+                      category: Uniqueness
+
+
+                - freshness(order_time) < 30d:
+                    name: Orders should be recent within 30 days for demo
+                    attributes:
+                      category: Freshness
+
+                - valid_count(customer_status) > 0:
+                    name: Customer status should be active or inactive
+                    valid values:
+                      - active
+                      - inactive
+                    attributes:
+                      category: Validity
+
+                - valid_count(order_status) > 0:
+                    name: Order status should be in allowed list
+                    valid values:
+                      - pending
+                      - completed
+                      - shipped
+                      - cancelled
+                    attributes:
+                      category: Validity
+
+                - valid_count(event_channel) > 0:
+                    name: Event channel should be web, mobile, or app
+                    valid values:
+                      - web
+                      - mobile
+                      - app
+                    attributes:
+                      category: Validity
+
+                - missing_count(city) = 0:
+                    name: City should not be missing
+                    attributes:
+                      category: Accuracy

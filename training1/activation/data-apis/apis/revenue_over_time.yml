@@ -1,0 +1,15 @@
+urlPath: /revenue_over_time
+description: This endpoint provides revenue metrics over time, segmented by product and order status for sales analytics.
+source: lens
+response:
+  - name: order_time
+  - name: product_name
+  - name: order_status
+  - name: total_revenue
+  - name: average_order_value
+  - name: total_orders
+cache:
+  - cacheTableName: 'revenue_cache'
+    sql: SELECT order_time, product_name FROM customer.orders
+    source: lens
+

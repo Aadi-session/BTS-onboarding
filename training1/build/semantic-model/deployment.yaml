@@ -1,0 +1,63 @@
+version: v1alpha
+name: "customer360"
+layer: user
+type: lens
+tags:
+  - lens
+description: This semantic model provides comprehensive insights for customer360 analysis.
+lens:
+  compute: runnable-default
+  secrets:
+    - name: bitbucket-sv
+      allKeys: true
+  source:
+    type: minerva # minerva, themis and depot
+    name: training #  service name
+    catalog: sujathadepot
+  repo:
+    url: https://github.com/Aadi-session/BTS-onboarding
+    lensBaseDir: BTS-onboarding/training/data-product/consumer-aligned/model
+    syncFlags:
+      - --ref=main
+
+  api:   # optional
+    replicas: 1 # optional
+    logLevel: Info  # optional
+    # envs:
+    #   LENS2_SCHEDULED_REFRESH_TIMEZONES: "UTC,America/Vancouver,America/Toronto"
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 256m
+        memory: 256Mi
+  worker: # optional
+    replicas: 1 # optional
+    logLevel: Info  # optional
+    # envs:
+    #   LENS2_SCHEDULED_REFRESH_TIMEZONES: "UTC,America/Vancouver,America/Toronto"
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 256m
+        memory: 256Mi
+  router: # optional
+    logLevel: info  # optional
+    # envs:
+    #   LENS2_SCHEDULED_REFRESH_TIMEZONES: "UTC,America/Vancouver,America/Toronto"
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 256m
+        memory: 256Mi
+  metric:
+    logLevel: info
+
+
+
+

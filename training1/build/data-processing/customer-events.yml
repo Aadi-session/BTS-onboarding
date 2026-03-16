@@ -1,0 +1,49 @@
+name: wf-customer-events-data
+version: v1
+type: workflow
+tags:
+- crm
+description: Ingesting  customers events data in lakehouse
+workflow:
+  dag:
+   - name: dg-customer-events-data
+     spec:
+       tags:
+         - crm
+       stack: flare:7.0
+       compute: runnable-default
+       stackSpec:
+         driver:
+           coreLimit: 2000m
+           cores: 1
+           memory: 2000m
+         executor:
+           coreLimit: 2000m
+           cores: 1
+           instances: 1
+           memory: 2000m
+         job:
+           explain: true
+           logLevel: INFO
+           inputs:
+             - name: customer_events_data
+               dataset: dataos://thirdparty01:csv_files/customer_events.csv?acl=rw
+               format: csv
+               options:
+                 inferSchema: true
+           steps:
+             - sequence:
+                 - name: final
+                   sql: >
+                     SELECT 
+                       * 
+                     FROM customer_events_data
+           outputs:
+             - name: final
+               dataset: dataos://sujathadepot:public/customer_events?acl=rw 
+               # Replace abc with your initials
+               driver: org.postgresql.Driver
+               format: jdbc
+               title: customer-events Dataset
+               options:
+                 saveMode: overwrite

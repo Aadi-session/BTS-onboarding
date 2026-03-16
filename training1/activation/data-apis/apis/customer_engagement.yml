@@ -1,0 +1,18 @@
+urlPath: /customer_engagement
+description: This endpoint exposes customer engagement metrics over time, including event counts and funnel stages for marketing analytics.
+source: lens
+response:
+  - name: event_time
+  - name: event_type
+  - name: event_channel
+  - name: funnel_stage
+  - name: total_events
+  - name: add_to_cart_events
+  - name: checkout_events
+  - name: payment_success_events
+cache:
+  - cacheTableName: 'engagement_cache'
+    sql: SELECT event_time, event_type FROM customer.events
+    source: lens
+
+

@@ -1,0 +1,74 @@
+name: training
+version: v1
+type: cluster
+tags:
+  - cluster
+  - training
+  - dataos:type:resource
+  - dataos:resource:cluster
+  - dataos:layer:user
+  - dataos:workspace:public
+description: the minerva cluster for all training workloads
+owner: dataos-manager
+workspace: public
+cluster:
+  compute: query-default
+  type: minerva
+  minerva:
+    replicas: 1
+    jvm:
+      additionalArgs:
+        - "--add-opens=java.base/java.nio=ALL-UNNAMED"
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 8Gi
+      limits:
+        cpu: 4000m
+        memory: 16Gi
+    depots:
+      - address: dataos://icebase:default
+      - address: dataos://gateway:default
+      - address: dataos://metisdb:default
+      - address: dataos://depotservice:default
+      - address: dataos://sujathadepot:default
+     
+    coordinatorEnvs:
+      JVM__opts: >
+        -server
+        -Xmx24G
+        -Xms24G
+        -XX:+UseG1GC
+        -XX:G1HeapRegionSize=32M
+        -XX:+UseGCOverheadLimit
+        -XX:+ExplicitGCInvokesConcurrent
+        -XX:+HeapDumpOnOutOfMemoryError
+        -Djdk.attach.allowAttachSelf=true
+        --add-opens=java.base/java.nio=ALL-UNNAMED
+        -Dnet.snowflake.jdbc.enableBouncyCastle=TRUE
+    workerEnvs:
+      JVM__opts: >
+        -server
+        -Xmx24G
+        -Xms24G
+        -XX:+UseG1GC
+        -XX:G1HeapRegionSize=32M
+        -XX:+UseGCOverheadLimit
+        -XX:+ExplicitGCInvokesConcurrent
+        -XX:+HeapDumpOnOutOfMemoryError
+        -Djdk.attach.allowAttachSelf=true
+        --add-opens=java.base/java.nio=ALL-UNNAMED
+        -Dnet.snowflake.jdbc.enableBouncyCastle=TRUE
+
+    debug:
+          logLevel: INFO
+          trinoLogLevel: ERROR
+    catalogs:
+      - name: cache
+        type: memory
+        properties:
+          memory.max-data-per-node: 128MB
+  runAsUser: minerva-cluster
+  maintenance:
+    restartCron: 13 1 */2 * *
+    timezone: ""

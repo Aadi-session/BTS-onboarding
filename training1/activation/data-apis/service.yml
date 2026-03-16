@@ -1,0 +1,40 @@
+name: customer-analytics-api
+version: v1
+type: service
+tags:
+  - service
+  - dataos:type:resource
+  - dataos:resource:service
+  - dataos:layer:user
+description: Talos Service for Customer Analytics
+workspace: public
+service:
+  servicePort: 3000
+  ingress:
+    enabled: true
+    stripPath: true
+    path: /talos/public:customer-analytics-api
+    noAuthentication: true
+  replicas: 1
+  logLevel: DEBUG
+  compute: runnable-default
+  envs:
+    TALOS_SCHEMA_PATH: /BTS-onboarding/training1/activation/data-apis
+    TALOS_BASE_PATH: /talos/public:customer-analytics-api
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  stack: talos:2.0
+  dataosSecrets:
+    - name: bitbucket-sv
+      allKeys: true
+  stackSpec:
+    repo:
+      url: https://github.com/Aadi-session/BTS-onboarding
+      projectDirectory: /BTS-onboarding/training1/activation/data-apis
+      syncFlags:
+        - --ref=main

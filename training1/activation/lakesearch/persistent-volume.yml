@@ -1,0 +1,11 @@
+name: pa-volume                           # Name of the Resource
+version: v1beta                           # Manifest version of the Resource
+type: volume                              # Type of Resource
+tags:                                     # Tags for categorizing the Resource
+  - volume
+description: Common attributes applicable to all DataOS Resources
+layer: user
+volume:
+  size: 100Mi                             # Example: 100Gi, 50Mi, 10Ti, 500Mi, 20Gi
+  accessMode: ReadWriteOnce               # Example: ReadWriteOnce, ReadOnlyMany
+  type: temp

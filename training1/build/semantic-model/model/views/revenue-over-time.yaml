@@ -1,0 +1,25 @@
+views:
+  - name: revenue_over_time
+    description: Tracks total revenue over time, segmented by product and order status.
+    public: true
+    meta:
+      title: Revenue Over Time
+      tags:
+        - DPDomain.Sales
+        - DPTier.Consumer Aligned
+      metric:
+        expression: "0 */4 * * *"
+        timezone: "Asia/Kolkata"
+        window: "month"
+
+    tables:
+      - join_path: customer.orders
+        prefix: false
+        includes:
+          - order_time
+          - product_name
+          - order_status
+          - total_revenue
+          - average_order_value
+          - total_orders
+ 
