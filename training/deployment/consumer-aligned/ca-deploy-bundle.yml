@@ -9,9 +9,9 @@ layer: user
 bundle:
   resources:
     - id: lens
-      file: /home/svsujatha/Pictures/BTS-onboarding/training/build/semantic-model/deployment.yaml
+      file: training/build/semantic-model/deployment.yaml
       workspace: public
 
     - id: quality-check
-      file: /home/svsujatha/Pictures/BTS-onboarding/training/build/slo/output/customer360.yml
+      file: training/build/slo/output/customer360.yml
       workspace: public
