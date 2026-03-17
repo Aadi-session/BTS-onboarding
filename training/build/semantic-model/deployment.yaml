@@ -7,9 +7,9 @@ tags:
 description: This semantic model provides comprehensive insights for customer360 analysis.
 lens:
   compute: runnable-default
-  secrets:
-    - name: bitbucket-sv
-      allKeys: true
+  # secrets:
+  #   - name: bitbucket-sv
+  #     allKeys: true
   source:
     type: minerva # minerva, themis and depot
     name: training #  service name
