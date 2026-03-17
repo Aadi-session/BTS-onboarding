@@ -45,7 +45,7 @@ v1beta:
 
     ports:
       lens:
-        ref: lens:v1alpha:customerdata-sagar:public
+        ref: lens:v1alpha:customerdatasagar:public
         refType: dataos
 
       # talos:
