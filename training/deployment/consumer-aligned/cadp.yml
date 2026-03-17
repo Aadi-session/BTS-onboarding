@@ -47,6 +47,6 @@ v1beta:
         ref: lens:v1alpha:customerdata:public
         refType: dataos
 
-      talos:
-        - ref: service:v1:customer-analytics-api:public
-          refType: dataos
+      # talos:
+      #   - ref: service:v1:customer-analytics-api:public
+      #     refType: dataos
