@@ -1,17 +1,17 @@
-name: customerdata360
+name: sagarcustomerdata360
 version: v1beta
 type: data
 description: Source-aligned Data Product
 tags:
-  - DPDomain.Marketing
+  - BTS Onboarding
   - DPUsecase.customer_data
   - DPTier.Source Aligned
 v1beta:
   data:
     meta:
-      title: Customer Data
+      title: Customer Data - BTS onboarding Sagar
     collaborators:
-      - name: manishagrawal      #Provide dataos id 
+      - name: sagaravhad      #Provide dataos id 
         description: owner
       - name: sanduvenkatasujatha
         description: developer

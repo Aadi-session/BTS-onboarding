@@ -1,4 +1,5 @@
 SELECT
   *
 FROM
-  icebase.sujathaschema.customer_360_dataset
+  icebase.sagarschema.customer_360_dataset 
+limit 10
