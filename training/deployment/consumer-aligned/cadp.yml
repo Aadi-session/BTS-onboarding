@@ -1,4 +1,4 @@
-name: customer360analysis-sagar
+name: customer360analysis-parag
 version: v1beta
 entity: product
 type: data
@@ -16,12 +16,12 @@ refs:
 v1beta:
   data:
     meta:
-      title: Customer 360 Analysis sagar
+      title: Customer 360 Analysis parag 
       sourceCodeUrl: https://github.com/Aadi-session/BTS-onboarding/blob/main/
       trackerUrl: https://rubikai.atlassian.net/browse
 
     collaborators:
-      - name: sagaravhad
+      - name: paragkadam
         description: owner
       - name: sanduvenkatasujatha
         description: developer
@@ -30,22 +30,22 @@ v1beta:
 
     resource:
         refType: dataos
-        ref: bundle:v1beta:customeranalysis-bundle-sagar
+        ref: bundle:v1beta:customeranalysis-bundle-parag
 
     inputs:
       - refType: dataos
-        ref: dataset:icebase:sagarschema:customer_360_dataset
+        ref: dataset:icebase:paragschema:customer_360_dataset
 
     outputs:
       - refType: dataos
-        ref: dataset:icebase:sagarschema:cross_sell_recommendations
+        ref: dataset:icebase:paragschema:cross_sell_recommendations
 
       - refType: dataos
-        ref: dataset:icebase:sagarschema:product_affinity_matrix
+        ref: dataset:icebase:paragschema:product_affinity_matrix
 
     ports:
       lens:
-        ref: lens:v1alpha:customerdatasagar:public
+        ref: lens:v1alpha:customerdataparag:public
         refType: dataos
 
       # talos:

@@ -1,4 +1,4 @@
-name: customeranalysis-bundle-sagar
+name: customeranalysis-bundle-parag
 version: v1beta
 type: bundle
 tags:
@@ -9,9 +9,9 @@ layer: user
 bundle:
   resources:
     - id: lens
-      file: /Users/sagaravhad/dataos/onboarding_code/BTS-onboarding/training/build/semantic-model/deployment.yaml
+      file: /Users/paragkadam/Documents/workshop/BTS-onboarding/training/build/semantic-model/deployment.yaml
       workspace: public
 
     - id: quality-check
-      file: /Users/sagaravhad/dataos/onboarding_code/BTS-onboarding/training/build/slo/output/customer360.yml
+      file: /Users/paragkadam/Documents/workshop/BTS-onboarding/training/build/slo/output/customer360.yml
       workspace: public

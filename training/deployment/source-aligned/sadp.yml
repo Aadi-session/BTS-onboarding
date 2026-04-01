@@ -1,4 +1,4 @@
-name: sagarcustomerdata360
+name: paragcustomerdata360
 version: v1beta
 type: data
 description: Source-aligned Data Product
@@ -9,9 +9,9 @@ tags:
 v1beta:
   data:
     meta:
-      title: Customer Data - BTS onboarding Sagar
+      title: Customer Data - BTS onboarding parag
     collaborators:
-      - name: sagaravhad      #Provide dataos id 
+      - name: paragkadam     #Provide dataos id 
         description: owner
       - name: sanduvenkatasujatha
         description: developer
@@ -36,4 +36,4 @@ v1beta:
       - refType: dataos
         ref: dataset:icebase:sujathaschema:customer_360_dataset
 
-
+        

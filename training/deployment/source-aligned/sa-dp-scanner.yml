@@ -1,5 +1,5 @@
 version: v1
-name: scan-dp-customer360-sagar
+name: scan-dp-customer360-parag
 type: workflow
 tags:
   - scanner

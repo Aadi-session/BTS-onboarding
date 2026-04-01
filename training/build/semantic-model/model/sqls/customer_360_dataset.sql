@@ -1,5 +1,5 @@
 SELECT
   *
 FROM
-  icebase.sagarschema.customer_360_dataset 
+  icebase.paragschema.customer_360_dataset 
 limit 10

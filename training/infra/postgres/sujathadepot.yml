@@ -3,17 +3,17 @@ version: v2alpha  # Manifest version
 type: depot       # Type of the Resource
 layer: user
 depot:
-  type: jdbc                 
+  type: jdbc          
   description: default postgres depot
   external: true
   secrets:
     - name: firstdepot-rw   # Reference the Instance Secret for read & write access
-      keys: 
+      keys:
         - firstdepot-rw
       allkeys: true
 
     - name: firstdepot-r    # Reference the Instance Secret for read access
-      keys: 
+      keys:
         - firstdepot-r
       allkeys: true
 
@@ -22,5 +22,3 @@ depot:
     host: sys-db-dataos-ck-rjhk-dataos-stg.postgres.database.azure.com # Replace with the database host URL
     port: 5432  # Replace with the database port number
     database: modern-postgres  # Replace with the database name to connect to
-
-
