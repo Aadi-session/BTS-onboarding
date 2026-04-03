@@ -15,7 +15,7 @@ lens:
     name: postgresabc
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: "E:\Kiran\MDF\Assignment\Assignment\BTS-onboarding\Usecase-kiran\build\semantic-model\models"
+    lensBaseDir: https://github.com/Aadi-session/BTS-onboarding/tree/main/Usecase-kiran/build/semantic-model
     syncFlags:
       - --ref=main
 
