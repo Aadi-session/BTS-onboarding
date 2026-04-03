@@ -13,7 +13,7 @@ v1beta: # mandatory
   data: # mandatory
     meta: # optional
       title: Sales Insights-kiranbele
-      #sourceCodeUrl: https://bitbucket.org/mywork15/sflens/src/main/
+      sourceCodeUrl: https://github.com/Aadi-session/BTS-onboarding
 
     collaborators: # optional
       - name: kiranbele

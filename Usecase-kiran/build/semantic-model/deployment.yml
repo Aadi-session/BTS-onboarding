@@ -14,8 +14,8 @@ lens:
     type: icebase
     name: postgresabc
   repo:
-    url: <url> 
-    lensBaseDir: <basedir>  # Ex: product-affinity-training/build/semantic-model/model
+    url: https://github.com/Aadi-session/BTS-onboarding
+    lensBaseDir: "E:\Kiran\MDF\Assignment\Assignment\BTS-onboarding\Usecase-kiran\build\semantic-model\models"
     syncFlags:
       - --ref=main
 
