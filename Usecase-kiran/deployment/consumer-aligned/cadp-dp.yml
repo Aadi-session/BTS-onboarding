@@ -1,0 +1,52 @@
+# Important: Replace 'abc' with your initials to personalize and distinguish the resource you’ve created.
+name: sales-performance-analysis-kb
+version: v1beta
+type: data
+description: Analyze the sales target and find achievement percentage.
+tags:
+  - DPDomain.Marketing
+  - DPUsecase.Customer Segmentation
+  - DPUsecase.Product Recommendation
+  - DPTier.Consumer Aligned
+v1beta:
+  data:
+    meta:
+      title: Sales Performance Analysis - KB
+      #sourceCodeUrl: https://bitbucket.org/tmdc/product-affinity-training/src/main/
+      #trackerUrl: https://rubikai.atlassian.net/browse/DPRB-65
+    collaborators:
+      - name: kirankadam
+        description: owner
+    resource:
+      refType: dataos
+      ref: bundle:v1beta:salesperformance-bundle-kb
+    inputs:
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/customers
+
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/targets
+
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/leads
+
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/products
+      
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/sales_fact
+      
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/sales_reps
+      
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/sales_rep_360_dataset
+
+    outputs:
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/sales-performance-classification     # Verify the Depot name for your training instance
+
+    ports:
+      lens:
+        ref: lens:v1alpha:sales-prformance-analysis-kb:public
+        refType: dataos

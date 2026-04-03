@@ -1,0 +1,16 @@
+name: salesperformance-bundle-kb
+version: v1beta
+type: bundle
+tags:
+- dataproduct
+description: This bundle resource is for the product affinity Data Product.
+layer: "user"
+bundle:
+resources:
+    - id: lens
+      file: D:\MDF\Training\Assignment\semantic-model\deployment.yml
+      workspace: public
+      
+    - id: sales-aggregate-quality-kb
+      file: D:\MDF\Training\Assignment\quality_sales_aggregate.yml
+      workspace: public

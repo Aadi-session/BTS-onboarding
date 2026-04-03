@@ -1,0 +1,50 @@
+version: v1beta
+name: salesreperformance-bundle
+type: bundle
+tags:
+  - dataproduct
+  - salesrepeformance
+  - postgres
+  - BTS
+description: Bundle for customers, target, leads, sales_fact,product flare, and soda
+layer: user
+
+bundle:
+  resources:
+
+
+
+    - id: salesrepperformance-customers
+      file: "D:\\MDF\\Training\\Assignment\\flare_customer.yml"
+
+    - id: salesrepperformance-leads
+      file: "D:\\MDF\\Training\\Assignment\\flare_leads.yml"
+
+    - id: salesrepperformance-products
+      file: "D:\\MDF\\Training\\Assignment\\flare_products.yml" 
+
+    - id: salesrepperformance-salesfact
+      file: "D:\\MDF\\Training\\Assignment\\flare_sales_fact.yml"
+
+    - id: salesrepperformance-salesrep
+      file: "D:\\MDF\\Training\\Assignment\\flare_sales_reps.yml"
+
+    - id: salesrepperformance-targets
+      file: "D:\\MDF\\Training\\Assignment\\flare_targets.yml"
+     
+
+    - id: salesrepperformance-aggregate
+      file: "D:\\MDF\\Training\\Assignment\\flare_sales_aggregate.yml"
+      dependencies:
+        - salesrepperformance-customers
+        - salesrepperformance-leads
+        - salesrepperformance-targets
+        - salesrepperformance-products
+        - salesrepperformance-salesrep
+        - salesrepperformance-salesfact
+      dependencyConditions:
+        - resourceId: salesrepperformance-aggregate
+          status:
+            is:
+              - active
+ 

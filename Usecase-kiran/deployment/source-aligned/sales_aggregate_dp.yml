@@ -1,0 +1,64 @@
+# Product meta section
+name: sales-aggregate-dp # mandatory
+version: v1beta # mandatory
+type: data # mandatory
+tags:   # optional
+  - DPDomain.Sales
+  - DPDomain.Marketing
+  - DPUsecase.Sales Analysis
+
+description: Focuses on insights into sales data. # optional
+# Product specific section
+v1beta: # mandatory
+  data: # mandatory
+    meta: # optional
+      title: Sales Insights-kiranbele
+      #sourceCodeUrl: https://bitbucket.org/mywork15/sflens/src/main/
+
+    collaborators: # optional
+      - name: kiranbele
+        description: developer
+
+    resource: # mandatory
+      refType: dataos
+      ref: bundle:v1beta:salesreperformance-bundle
+    inputs: # mandatory
+      - refType: depot
+        ref: dataos://thirdparty01:srp_analysis/customers.csv
+
+      - refType: depot
+        ref: dataos://thirdparty01:srp_analysis/targets.csv
+
+      - refType: depot
+        ref: dataos://thirdparty01:srp_analysis/leads.csv
+
+      - refType: depot
+        ref: dataos://thirdparty01:srp_analysis/products.csv
+
+      - refType: depot
+        ref: dataos://thirdparty01:srp_analysis/sales_fact.csv
+
+      - refType: depot
+        ref: dataos://thirdparty01:srp_analysis/sales_reps.csv
+    
+    outputs:
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/customers
+
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/targets
+
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/leads
+
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/products
+      
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/sales_fact
+      
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/sales_reps
+      
+      - refType: dataos
+        ref: dataos://icebase:kiranschema/sales_rep_360_dataset
