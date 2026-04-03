@@ -1,0 +1,50 @@
+tables:
+  - name: sales_aggregate
+    sql: {{ load_sql('products') }}
+    description: "This table stores key details about the products."
+    public: true
+
+    joins:
+      - name: sales_fact
+        relationship: many_to_one
+        sql: "{TABLE.product_id}= {sales_fact.product_id}"
+
+    dimensions:   
+      - name: product_id
+        type: number
+        column: product_id
+        description: "The unique identifier for each product."
+        primary_key: true
+        public: true
+
+
+      - name: product_name
+        type: string
+        column: product_name
+        description: "Specifies the product name
+
+      - name: category
+        type: string
+        column: category
+        description: "This defines product category."
+
+      - name: brand
+        type: string
+        column: brand
+        description: "Associated brand."
+
+      - name: unit_price
+        type: number
+        column: unit_price
+        description: "Unit price of product"
+
+    measures:
+      - name: total_products
+        sql: "COUNT( Distinct {product_id})"
+        type: number
+        description: "The total number of product."
+
+      
+
+
+    

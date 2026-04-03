@@ -1,0 +1,145 @@
+name: salesrepperformance-aggregate
+version: v1
+type: workflow
+tags:
+  - Tier.Gold
+  - dataos:type:resource
+  - dataos:resource:workflow
+  - dataos:layer:user
+  - dataos:workspace:public
+description: 
+  This workflow is responsible for Sample data for analysis and insights from
+  azure blob storage into Icebase.
+owner: kirankadam
+workspace: public
+workflow:
+  title: conversation Dataset
+  dag:
+    - name: dg-salesrepperformance-aggregate
+      description:
+        This workflow is responsible for Sample data for analysis and insights
+        from postgres into Icebase.
+      title: conversation Dataset
+      spec:
+        stack: flare:7.0
+        logLevel: INFO
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 200m
+            memory: 250Mi
+          limits:
+            cpu: '1'
+            memory: 1000Mi
+          
+        runAsUser: kirankadam
+        stackSpec:
+          driver:
+            coreLimit: 1200m
+            cores: 1
+            memory: 2024m
+          executor:
+            coreLimit: 2200m
+            cores: 2
+            instances: 2
+            memory: 4024m
+          job:
+            explain: true
+            inputs:
+              - dataset: dataos://icebase:kiranschema/customers?acl=rw
+                name: customers
+                options:
+                  driver: org.postgresql.Driver
+                  inferSchema: true
+              - dataset: dataos://icebase:kiranschema/leads?acl=rw
+                name: leads
+                options:
+                  driver: org.postgresql.Driver
+                  inferSchema: true
+              - dataset: dataos://icebase:kiranschema/products?acl=rw
+                name: products
+                options:
+                  driver: org.postgresql.Driver
+                  inferSchema: true
+              - dataset: dataos://icebase:kiranschema/targets?acl=rw
+                name: target
+                options:
+                  driver: org.postgresql.Driver
+                  inferSchema: true
+              - dataset: dataos://icebase:kiranschema/sales_fact?acl=rw
+                name: sales_fact
+                options:
+                  driver: org.postgresql.Driver
+                  inferSchema: true
+              - dataset: dataos://icebase:kiranschema/sales_reps?acl=rw
+                name: sales_reps
+                options:
+                  driver: org.postgresql.Driver
+                  inferSchema: true
+            outputs:
+              - dataset: dataos://icebase:kiranschema/sales_rep_360_dataset?acl=rw
+                description: 
+                  The conversation table is a structured dataset that contains
+                  data about customer's leads , targets and products.
+                format: Iceberg
+                name: final_step
+                options:
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+                  saveMode: append
+                tags:
+                  - Tier.Gold
+                title: Conversation Context Dataset
+            steps:
+              - sequence:
+                  - name: final_step
+                    sql: |
+                      SELECT
+                      c.customer_id,
+                      c.customer_name,
+                      c.segment,
+                      c.city,
+                      c.state,
+                      c.join_date AS customer_join_date,
+                      c.email_id,
+                      p.product_id,
+                      p.product_name,
+                      p.category AS product_category,
+                      p.brand,
+                      p.unit_price,
+                      sr.sales_rep_id,
+                      sr.sales_rep_name,
+                      sr.region AS rep_region,
+                      sr.manager_name,
+                      sr.joining_date AS rep_join_date,
+                      t.target_month,
+                      t.target_revenue,
+                      t.target_units,
+                      t.target_orders,
+                      sf.order_id,
+                      sf.order_date,
+                      sf.store_id,
+                      sf.region AS sale_region,
+                      sf.revenue AS sale_revenue,
+                      sf.quantity,
+                      sf.discount_amount,
+                      sf.cost_amount,
+                      sf.order_status,
+                      l.lead_id,
+                      l.created_date AS lead_created_date,
+                      l.lead_source,
+                      l.lead_status,
+                      l.converted_order_id
+                      FROM sales_fact sf
+                      LEFT JOIN customers c
+                      ON sf.customer_id = c.customer_id
+                      LEFT JOIN products p
+                      ON sf.product_id = p.product_id
+                      LEFT JOIN sales_reps sr
+                      ON sf.sales_rep_id = sr.sales_rep_id
+                      LEFT JOIN targets t
+                      ON sr.sales_rep_id = t.sales_rep_id
+                      LEFT JOIN leads l
+                      ON sf.customer_id = l.customer_id
+                      AND sf.sales_rep_id = l.sales_rep_id

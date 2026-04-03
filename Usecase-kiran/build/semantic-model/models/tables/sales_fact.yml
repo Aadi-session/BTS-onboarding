@@ -1,0 +1,95 @@
+tables:
+  - name: sales_fact
+    sql: {{ load_sql('sales_fact') }}
+    description: "This table stores key details about the salefact."
+    public: true
+
+    joins:
+      - name: customers
+        relationship: one_to_many
+        sql: "{TABLE.customer_id}= {customer.product_id}"
+
+      - name: products
+        relationship: one_to_many
+        sql: "{TABLE.product_id}= {product.product_id}"
+
+      - name: sales_reps
+        relationship: one_to_many
+        sql: "{TABLE.sales_rep_id}= {sales_reps.sales_rep_id}"
+
+      - name: targets
+        relationship: one_to_many
+        sql: "{TABLE.sales_rep_id}= {targets.sales_rep_id}"
+
+      - name: leads
+        relationship: one_to_many
+        sql: "{TABLE.sales_rep_id}= {leads.sales_rep_id} AND {TABLE.customer_id}= {leads.customer_id}"
+
+    dimensions: 
+     
+       
+      - name: order_id
+        type: number
+        column: order_id
+        description: "The unique identifier for each oreder."
+        primary_key: true
+        public: true
+
+
+      - name: order_date
+        type: time
+        column: order_date
+        description: "Specifies the order date.""
+
+      - name: region
+        type: string
+        column: region
+        description: "This defines region."
+
+      - name: revenue
+        type: number
+        column: revenue
+        description: "Revenue amount."
+
+      - name: quantity
+        type: number
+        column: quantity
+        description: "Quantity of order"
+
+      - name: discount_amount
+        type: number
+        column: discount_amount
+        description: "Discount amount of order"
+
+      - name: cost_amount
+        type: number
+        column: cost_amount
+        description: "Cost amount of order"
+
+      - name: order_status
+        type: String
+        column: order_status
+        description: "Orer status of order"
+
+    measures:
+      - name: total_revenue
+        sql: "COUNT( Distinct {revenue})"
+        type: number
+        description: "The total of revenue."
+
+      - name: total_orders
+        sql: "COUNT( Distinct {order_id})"
+        type: number
+        description: "Total Orders."
+
+      - name: sales_volume
+        sql: "COUNT( Distinct {quantity})"
+        type: number
+        description: "Sales Volume"
+
+     
+
+      
+
+
+    

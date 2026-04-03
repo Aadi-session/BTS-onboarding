@@ -1,0 +1,53 @@
+version: v1alpha
+name: sales-prformance-analysis-kb
+layer: user
+type: lens
+tags:
+  - lens
+description: This semantic model provides comprehensive insights for product affinity analysis.
+lens:
+  compute: runnable-default
+  secrets:
+    - name: bitbucket-cred
+      allKeys: true
+  source:
+    type: icebase
+    name: postgresabc
+  repo:
+    url: <url> 
+    lensBaseDir: <basedir>  # Ex: product-affinity-training/build/semantic-model/model
+    syncFlags:
+      - --ref=main
+
+  api:   # optional
+    replicas: 1 # optional
+    logLevel: info  # optional
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 500Mi
+  worker: # optional
+    replicas: 1 # optional
+    logLevel: debug  # optional
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 500Mi
+  router: # optional
+    logLevel: info  # optional
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 500Mi
+
+  metric:
+    logLevel: info

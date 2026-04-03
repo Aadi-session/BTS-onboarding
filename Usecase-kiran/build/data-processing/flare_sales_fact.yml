@@ -1,0 +1,54 @@
+name: salesrepperformance-salesfact
+version: v1
+type: workflow  
+tags:
+  - sales-performance
+description: Ingesting customer dimension data into Postgres
+workflow:
+  dag:
+    - name: sales-fact-data
+      spec:
+        tags:
+          - sales-performance
+          - sales-fact
+        stack: flare:7.0
+        compute: runnable-default
+        stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 1
+            memory: 2000m
+          executor:
+            coreLimit: 2000m
+            cores: 1
+            instances: 1
+            memory: 2000m
+          job:
+            explain: true 
+            logLevel: INFO
+            inputs:
+              - name: sales_fact_data
+                dataset: dataos://thirdparty01:srp_analysis/sales_fact.csv?acl=rw
+                format: csv
+                options:
+                  inferSchema: true     # Automatically detect the schema and type of data
+            steps:
+              - sequence:
+                  - name: final
+                    sql: >
+                      SELECT
+                          *
+                      FROM sales_fact_data
+            outputs:
+              - name: final
+                dataset: dataos://icebase:kiranschema/sales_fact?acl=rw   # change the schema name 
+                format: Iceberg
+                description: Customer performance data
+                options:
+                  saveMode: append
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+
+
+ 

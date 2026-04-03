@@ -1,0 +1,68 @@
+tables:
+  - name: leads
+    sql: {{ load_sql('leads') }}
+    description: "This table stores key details about the lead."
+    public: true
+
+    joins:
+      - name: sales_fact
+        relationship: one_to_many
+        sql: "{TABLE.customer_id}= {sales_fact.customer_id}"
+
+    dimensions:   
+      - name: lead_id
+        type: number
+        column: lead_id
+        description: "The unique identifier for each lead."
+        primary_key: true
+        public: true
+
+
+      - name: created_date
+        type: time
+        column: created_date
+        description: "Specifies the lead creation date"
+
+      - name: sales_rep_id
+        type: number
+        column: sales_rep_id
+        description: "This defines sales representative of lead."
+
+      - name: customer_id
+        type: string
+        column: customer_id
+        description: "Associated customer to lead."
+
+      - name: lead_source
+        type: string
+        column: lead_source
+        description: "Source (campaign, referral, walk-in)"
+
+      - name: lead_status
+        type: string
+        column: lead_status
+        description: "Lead status of customer"
+
+      - name: converted_order_id
+        type: string
+        column: converted_order_id
+        description: "Converted lead ID"
+
+    measures:
+      - name: converted_leads
+        sql: "COUNT( Distinct {converted_order_id})"
+        type: number
+        description: "The total number of leads converted."
+
+      - name: total_leads
+        sql: "COUNT(DISTINCT lead_id)"
+        type: number
+        description: "The total number of leads generated."
+
+      - name: lead_conversion_rate
+        sql: "COUNT(DISTINCT converted leads) / COUNT(DISTINCT total_leads) * 100"
+        type: number
+        description: "% of lead conversion"
+
+
+    

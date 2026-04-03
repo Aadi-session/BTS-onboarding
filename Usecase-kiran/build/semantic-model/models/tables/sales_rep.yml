@@ -1,0 +1,59 @@
+tables:
+  - name: sales_reps
+    sql: {{ load_sql('sales_reps') }}
+    description: "This table stores key details about the Sales representatives."
+    public: true
+
+    joins:
+      - name: sales_fact
+        relationship: one_to_many
+        sql: "{TABLE.sales_rep_id}= {sales_fact.sales_rep_id}"
+
+    dimensions:   
+      - name: customer_id
+        type: number
+        column: customer_id
+        description: "The unique identifier for each customer."
+        primary_key: true
+        public: true
+
+
+      - name: customer_name
+        type: string
+        column: customer_name
+        description: "Specifies the customer name"
+
+      - name: segment
+        type: string
+        column: segment
+        description: "This defines segment of customer from retail,wholesale, premium."
+
+      - name: city
+        type: string
+        column: city
+        description: "The city of customer."
+
+      - name: state
+        type: string
+        column: state
+        description: "The state of customer."
+
+      - name: join_date
+        type: time
+        column: join_date
+        description: "Joining date of customer"
+
+      
+    measures:
+      - name: total_customers
+        sql: "COUNT( Distinct {customer_id})"
+        type: number
+        description: "The total number of customers in the dataset, used as a basic measure of customer volume."
+
+      - name: orders_per_customer
+        sql: "COUNT(DISTINCT sales_fact.order_id) /COUNT(DISTINCT customer_id)"
+        type: number
+        description: "The total number of orders per customer."
+
+
+    

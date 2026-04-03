@@ -1,0 +1,35 @@
+views:
+  - name: performance_classification
+    description: This metric calculate sales performance classification on basis of target achievement. 
+    public: true
+    meta:
+      title: Performance Classification
+      tags:   
+        - DPDomain.Marketing
+        - DPUsecase.Customer Segmentation
+        - DPUsecase.Product Recommendation
+        - DPTier.Consumer Aligned
+      metric:
+        expression: "*/45  * * * *"
+        timezone: "UTC"
+        window: "day"
+        excludes: 
+          - target_orders
+          - target_units
+    tables:
+      - join_path: targets
+        prefix: true
+        includes:
+          - sales_rep_id
+          - sales_rep_name
+          - target_month
+          - target_revenue
+          - target_achievement_percent
+          - performance_classification
+          
+
+      - join_path: products
+        prefix: true
+        includes:
+          - category
+          - name

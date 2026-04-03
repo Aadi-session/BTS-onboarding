@@ -1,0 +1,77 @@
+tables:
+  - name: targets
+    sql: {{ load_sql('targets') }}
+    description: "This table stores key details about the targets."
+    public: true
+
+    joins:
+      - name: sales_fact
+        relationship: many_to_one
+        sql: "{TABLE.sales_rep_id}= {sales_fact.sales_rep_id}"
+
+      - name: sales_reps
+        relationship: many_to_one
+        sql: "{TABLE.sales_rep_id}= {sales_reps.sales_rep_id}"
+
+    dimensions:   
+      - name: sales_rep_id
+        type: number
+        column: sales_rep_id
+        description: "The unique identifier for each product."
+        primary_key: true
+        public: true
+
+    
+      - name: target_month
+        type: string
+        column: target_month
+        description: "Specifies the target month "
+
+      - name: target_revenue
+        type: string
+        column: target_revenue
+        description: "This defines target revenue."
+
+      - name: target_units
+        type: string
+        column: target_units
+        description: "target units"
+
+      - name: target_orders
+        type: number
+        column: target_orders
+        description: "target orders"
+
+      - name: sales_rep_name
+        type: string
+        sql: "{sales_rep.sales_rep_name}"
+        description: "Name of sales representative"
+
+    measures:
+
+
+      - name: target_achievement_percent
+        sql: "(SUM(sales_fact.revenue) / target_revenue) * 100"
+        type: number
+        description: "Target achievement percentage."
+  
+      - name: performance_classification
+        sql: >
+             CASE 
+              WHEN target_achievement_percent BETWEEN (70,99) THEN 'Needs Attention'
+              WHEN target_achievement_percent BETWEEN (100,119) THEN 'Achiever'
+              WHEN target_achievement_percent >= 120 THEN 'High Performer'
+             ELSE 'Underperformer'
+             END AS 
+        type: string
+        description: "Performer Classification"
+
+    
+      
+
+    
+
+      
+
+
+    

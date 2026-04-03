@@ -1,0 +1,55 @@
+name: salesrepperformance-products
+version: v1
+type: workflow  
+tags:
+  - sales-performance
+  - products
+description: Ingesting customer dimension data into Postgres
+workflow:
+  dag:
+    - name: products-data
+      spec:
+        tags:
+          - sales-performance
+          - products
+        stack: flare:7.0
+        compute: runnable-default
+        stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 1
+            memory: 2000m
+          executor:
+            coreLimit: 2000m
+            cores: 1
+            instances: 1
+            memory: 2000m
+          job:
+            explain: true 
+            logLevel: INFO
+            inputs:
+              - name: products_data
+                dataset: dataos://thirdparty01:srp_analysis/products.csv?acl=rw
+                format: csv
+                options:
+                  inferSchema: true     # Automatically detect the schema and type of data
+            steps:
+              - sequence:
+                  - name: final
+                    sql: >
+                      SELECT
+                          *
+                      FROM products_data
+            outputs:
+              - name: final
+                dataset: dataos://icebase:kiranschema/products?acl=rw   # change the schema name 
+                format: Iceberg
+                description: Customer performance data
+                options:
+                  saveMode: append
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+
+
+ 
