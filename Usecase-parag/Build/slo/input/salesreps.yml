@@ -1,0 +1,73 @@
+name: soda-sales-quality-minerva
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+  - sales
+description: Applying quality checks for the customers sales data
+workspace: public
+workflow:
+  # schedule:
+  #   cron: '00 08 * * *'
+  #   concurrencyPolicy: Forbid
+  dag:
+    - name: soda-salesreps-quality
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:paragschema/sales_reps
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate schema for sales_reps dataset
+                    fail:
+                      when wrong column type:
+                        sales_rep_id: string
+                        sales_rep_name: string
+                        region: string
+                        manager_name: string 
+                        joining_date: date
+                    attributes:
+                      category: Schema
+
+                - missing_count(sales_rep_id) = 0:
+                    name: Customer ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - duplicate_count(sales_rep_id) = 0:
+                    name: Customer ID should not be duplicated
+                    attributes:
+                      category: Uniqueness
+
+                - missing_count(sales_rep_name) = 0:
+                    name: Customer name should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(manager_name) = 0:
+                    name: Customer email should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(region) = 0:
+                    name: City should not be missing
+                    attributes:
+                      category: Completeness

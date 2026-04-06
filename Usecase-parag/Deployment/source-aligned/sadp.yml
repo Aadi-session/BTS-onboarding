@@ -1,0 +1,47 @@
+name: paragsalesdata360
+version: v1beta
+type: data
+description: Source-aligned Data Product
+tags:
+  - BTS Onboarding
+  - DPUsecase.customer_data
+  - DPTier.Source Aligned
+v1beta:
+  data:
+    meta:
+      title: sales Data - BTS onboarding parag
+    collaborators:
+      - name: paragkadam
+        description: owner
+      - name: paragkadam
+        description: developer
+      - name: practice
+        description: consumer
+
+    resource:
+      refType: dataos
+      ref: bundle:v1beta:sales360-bundle
+    inputs:
+      - refType: dataos
+        ref: dataos://icebase:paragschema/customers
+
+      - refType: dataos
+        ref: dataos://icebase:paragschema/leads
+
+      - refType: dataos
+        ref: dataos://icebase:paragschema/products
+
+      - refType: dataos
+        ref: dataos://icebase:paragschema/sales_fact
+
+      - refType: dataos
+        ref: dataos://icebase:paragschema/sales_reps
+
+      - refType: dataos
+        ref: dataos://icebase:paragschema/targets
+
+    outputs:
+
+      - refType: dataos
+        ref: dataset:icebase:paragschema:sales_rep_360_dataset
+        

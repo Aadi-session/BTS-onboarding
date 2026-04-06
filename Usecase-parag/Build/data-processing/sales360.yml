@@ -1,0 +1,130 @@
+version: v1
+name: salesrepperformance-360
+type: workflow
+tags:
+  - Tier.Gold
+
+description: This workflow is responsible for Sample data for analysis and insights from azure blob storage into Icebase.
+
+workflow:
+  title: conversation Dataset
+  dag:
+    - name: salesrep-360-dataset
+      description: This workflow is responsible for Sample data for analysis and insights from postgres into Icebase.
+      title: conversation Dataset
+      spec:
+        tags:
+          - Tier.Gold
+        stack: flare:7.0
+        compute: runnable-default
+
+        stackSpec:
+          driver:
+            coreLimit: 1200m
+            cores: 1
+            memory: 2024m
+          executor:
+            coreLimit: 2200m
+            cores: 2
+            instances: 2
+            memory: 4024m
+
+          job:
+            explain: true
+
+            inputs:
+              - name: customers
+                dataset: dataos://icebase:paragschema/customers?acl=rw
+                format: iceberg
+
+              - name: leads
+                dataset: dataos://icebase:paragschema/leads?acl=rw
+                format: iceberg
+
+              - name: products
+                dataset: dataos://icebase:paragschema/products?acl=rw
+                format: iceberg
+
+              - name: target
+                dataset: dataos://icebase:paragschema/targets?acl=rw
+                format: iceberg
+
+              - name: sales_fact
+                dataset: dataos://icebase:paragschema/sales_fact?acl=rw
+                format: iceberg
+
+              - name: sales_reps
+                dataset: dataos://icebase:paragschema/sales_reps?acl=rw
+                format: iceberg
+
+            outputs:
+              - name: sales_rep_360_dataset
+                dataset: dataos://icebase:paragschema/sales_rep_360_dataset?acl=rw
+                format: Iceberg
+                description: The conversation table is a structured dataset that contains comprehensive information about customer feedback and engagement. It serves as a repository for conversation data, facilitating efficient management, analysis, and decision-making processes related to user engagement and feedback.
+                tags:
+                  - Tier.Gold
+                options:
+                  saveMode: append
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+                title: Conversation Context Dataset
+
+            steps:
+              - sequence:
+                  - name: sales_rep_360_dataset
+                    sql: |
+                      SELECT
+                        c.customer_id,
+                        c.customer_name,
+                        c.segment,
+                        c.city,
+                        c.state,
+                        c.join_date AS customer_join_date,
+
+                        p.product_id,
+                        p.product_name,
+                        p.category AS product_category,
+                        p.brand,
+
+                        sr.sales_rep_id,
+                        sr.sales_rep_name,
+                        sr.region AS rep_region,
+                        sr.manager_name,
+                        sr.joining_date AS rep_join_date,
+
+                        t.target_month,
+                        t.target_revenue,
+                        t.target_units,
+                        t.target_orders,
+
+                        sf.order_id,
+                        sf.order_date,
+                        sf.store_id,
+                        sf.region AS sale_region,
+                        sf.revenue AS sale_revenue,
+                        sf.quantity,
+                        sf.discount_amount,
+                        sf.cost_amount,
+                        sf.order_status,
+
+                        l.lead_id,
+                        l.created_date AS lead_created_date,
+                        l.lead_source,
+                        l.lead_status,
+                        l.converted_order_id
+
+                      FROM sales_fact sf
+                      LEFT JOIN customers c
+                        ON sf.customer_id = c.customer_id
+                      LEFT JOIN products p
+                        ON sf.product_id = p.product_id
+                      LEFT JOIN sales_reps sr
+                        ON sf.sales_rep_id = sr.sales_rep_id
+                      LEFT JOIN target t
+                        ON sr.sales_rep_id = t.sales_rep_id
+                      LEFT JOIN leads l
+                        ON sf.customer_id = l.customer_id
+                       AND sf.sales_rep_id = l.sales_rep_id
+ 

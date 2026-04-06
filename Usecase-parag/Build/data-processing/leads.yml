@@ -1,0 +1,53 @@
+name: leads-salesrepperformance-data
+version: v1
+type: workflow
+tags:
+  - sales-performance
+  - BTS
+  - Use Case
+description: Ingesting leads dimension data into azure blob storage lakehouse
+workflow:
+  dag:
+    - name: leads-data
+      spec:
+        tags:
+          - sales-performance
+        stack: flare:7.0
+        compute: runnable-default
+        stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 1
+            memory: 2000m
+          executor:
+            coreLimit: 2000m
+            cores: 1
+            instances: 1
+            memory: 2000m
+          job:
+            explain: true 
+            logLevel: INFO  
+            inputs:
+              - name: leads_data
+                dataset: dataos://thirdparty01:srp_analysis/leads.csv?acl=rw
+                format: csv
+                options:
+                  inferSchema: true     # Automatically detect the schema and type of data
+            steps:
+              - sequence:
+                  - name: final
+                    sql: >
+                      SELECT
+                          *
+                      FROM leads_data
+            outputs:
+              - name: final
+                dataset: dataos://icebase:paragschema/leads?acl=rw   # change the schema name 
+                format: Iceberg
+                description: leads performance data
+                options:
+                  saveMode: append
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+ 

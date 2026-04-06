@@ -1,0 +1,43 @@
+name: sales360analysis-parag
+version: v1beta
+entity: product
+type: data
+tags:
+  - BTS onboarding
+  - sales representative data
+description: Identifies cross-sell opportunities through product affinity analysis, improving recommendations by understanding product relationships.
+refs:
+  - title: 'Sales Workspace Info'
+    href: https://dataos.info/interfaces/cli/command_reference/#workspace
+
+v1beta:
+  data:
+    meta:
+      title: Sales 360 Analysis parag
+      sourceCodeUrl: https://github.com/Aadi-session/BTS-onboarding/blob/main/
+      trackerUrl: https://rubikai.atlassian.net/browse
+
+    collaborators:
+      - name: paragkadam
+        description: owner
+      - name: paragkadam
+        description: developer  
+      - name: practice
+        description: consumer
+
+    resource:
+        refType: dataos
+        ref: bundle:v1beta:salesanalysis-bundle-parag
+
+    inputs:
+      - refType: dataos
+        ref: dataset:icebase:paragschema:sales_rep_360_dataset
+
+    outputs:
+      - refType: dataos
+        ref: dataset:icebase:paragschema:sales_rep_classification
+
+    ports:
+      lens:
+        ref: lens:v1alpha:salesdataparag:public
+        refType: dataos

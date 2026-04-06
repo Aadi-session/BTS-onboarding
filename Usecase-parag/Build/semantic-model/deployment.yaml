@@ -1,0 +1,59 @@
+name: "salesdataparag"
+version: v1alpha
+layer: user
+type: lens
+tags:
+  - lens
+description: This semantic model provides comprehensive insights for sales360 analysis.
+lens:
+  compute: runnable-default
+  # secrets:
+  #   - name: bitbucket-sv
+  #     allKeys: true
+  source:
+    type: minerva
+    name: training
+    catalog: sujathadepot
+  repo:
+    url: https://github.com/Aadi-session/BTS-onboarding
+    lensBaseDir: BTS-onboarding/Use_case1/Build/semantic-model/model
+    syncFlags:
+      - --ref=main
+
+  api:   # optional
+    replicas: 1 # optional
+    logLevel: Info  # optional
+    # envs:
+    #   LENS2_SCHEDULED_REFRESH_TIMEZONES: "UTC,America/Vancouver,America/Toronto"
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 256m
+        memory: 256Mi
+  worker: # optional
+    replicas: 1 # optional
+    logLevel: Info  # optional
+    # envs:
+    #   LENS2_SCHEDULED_REFRESH_TIMEZONES: "UTC,America/Vancouver,America/Toronto"
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 256m
+        memory: 256Mi
+  router: # optional
+    logLevel: info  # optional
+    # envs:
+    #   LENS2_SCHEDULED_REFRESH_TIMEZONES: "UTC,America/Vancouver,America/Toronto"
+    resources: # optional
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 256m
+        memory: 256Mi
+  metric:
+    logLevel: info

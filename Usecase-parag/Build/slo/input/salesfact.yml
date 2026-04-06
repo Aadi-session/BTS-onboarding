@@ -1,0 +1,135 @@
+name: soda-salesfact-quality-minerva
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+  - sales
+description: Applying quality checks for the salesfact data
+workspace: public
+workflow:
+  # schedule:
+  #   cron: '00 08 * * *'
+  #   concurrencyPolicy: Forbid
+  dag:
+    - name: soda-sales_fact-quality
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:paragschema/sales_fact
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate schema for customers dataset
+                    fail:
+                      when wrong column type:
+                        order_id: string
+                        order_date: date
+                        customer_id: string
+                        product_id: string 
+                        sales_rep_id: string
+                        store_id: string
+                        region: string
+                        revenue: decimal
+                        quantity: integer
+                        discount_amount: decimal
+                        cost_amount: decimal
+                        order_status: string
+                    attributes:
+                      category: Schema
+
+                - missing_count(order_id) = 0:
+                    name: Customer ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - duplicate_count(order_id) = 0:
+                    name: Customer ID should not be duplicated
+                    attributes:
+                      category: Uniqueness
+
+                - invalid_count(order_id) = 0:
+                    name: Customer ID should be greater than zero
+                    valid min: 1
+                    attributes:
+                      category: Validity
+                
+                - missing_count(customer_id) = 0:
+                    name: Customer ID should not be missing in events
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(product_id) = 0:
+                    name: Customer ID in events should be greater than zero
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - missing_count(product_id) = 0:
+                    name: Customer ID should not be missing in events
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(customer_id) = 0:
+                    name: Customer ID in events should be greater than zero
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - missing_count(sales_rep_id) = 0:
+                    name: Customer ID should not be missing in events
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(sales_rep_id) = 0:
+                    name: Customer ID in events should be greater than zero
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - missing_count(store_id) = 0:
+                    name: Customer ID should not be missing in events
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(store_id) = 0:
+                    name: Customer ID in events should be greater than zero
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - missing_count(region) = 0:
+                    name: Customer name should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(revenue) = 0:
+                    name: Customer email should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(quantity) = 0:
+                    name: City should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(order_status) = 0:
+                    name: City should not be missing
+                    attributes:
+                      category: Completeness

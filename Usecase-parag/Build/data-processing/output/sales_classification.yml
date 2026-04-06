@@ -1,0 +1,59 @@
+version: v1
+name: wf-sales-classification
+type: workflow
+tags:
+  - analytics
+description: Build sales_rep_classification from the sales_360_dataset.
+workflow:
+  dag:
+    - name: dg-sales-360-classification
+      spec:
+        tags:
+          - analytics
+        stack: flare:7.0
+        compute: runnable-default
+        stackSpec:
+          job:
+            explain: true
+            inputs:
+              - name: sales_data
+                dataset: dataos://icebase:paragschema/sales_rep_360_dataset?acl=r
+                format: Iceberg
+            outputs:
+              - name: Tire_classification
+                dataset: dataos://icebase:paragschema/sales_rep_classification?acl=rw
+                format: Iceberg
+                title: Tire classification
+                options:
+                  saveMode: overwrite
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+            steps:
+              - sequence:
+                  - name: Target_avhievement_calc
+                    sql: |
+                      SELECT
+                      sales_rep_id,
+                      CASE 
+                          WHEN SUM(target_revenue) = 0 THEN 0
+                          ELSE (SUM(revenue) / SUM(target_revenue)) * 100
+                      END AS target_achievement_percent
+                      FROM target GROUP BY sales_rep_id
+                      ORDER BY target_achievement_percent DESC;
+
+                  - name: build_sales_classification
+                    sql: |
+                      SELECT
+                      t.sales_rep_id,
+                      CASE
+                          WHEN ta.target_achievement < 70 THEN 'Underperformer'
+                          WHEN ta.target_achievement BETWEEN 70 AND 99 THEN 'Needs attention'
+                          WHEN ta.target_achievement BETWEEN 100 AND 119 THEN 'Achiever'
+                          ELSE 'High performer'
+                      END AS sales_rep_classification
+                      FROM target t
+                      JOIN Target_avhievement_calc ta
+                          ON t.sales_rep_id = ta.sales_rep_id
+                      ORDER BY
+                          sales_rep_classification;

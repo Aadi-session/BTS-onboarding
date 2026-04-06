@@ -1,0 +1,55 @@
+name: customer-salesrepperformance-data
+version: v1
+type: workflow  
+tags:
+  - sales-performance
+  - BTS
+  - Use Case
+description: Ingesting customer dimension data into azure blob storage lakehouse
+workflow:
+  dag:
+    - name: customers-data
+      spec:
+        tags:
+          - sales-performance
+        stack: flare:7.0
+        compute: runnable-default
+        stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 1
+            memory: 2000m
+          executor:
+            coreLimit: 2000m
+            cores: 1
+            instances: 1
+            memory: 2000m
+          job:
+            explain: true 
+            logLevel: INFO
+            inputs:
+              - name: customers_data
+                dataset: dataos://thirdparty01:srp_analysis/customers.csv?acl=rw
+                format: csv
+                options:
+                  inferSchema: true     # Automatically detect the schema and type of data
+            steps:
+              - sequence:
+                  - name: final
+                    sql: >
+                      SELECT
+                          *
+                      FROM customers_data
+            outputs:
+              - name: final
+                dataset: dataos://icebase:paragschema/customers?acl=rw   # change the schema name 
+                format: Iceberg
+                description: customers performance data
+                options:
+                  saveMode: append
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+
+
+ 

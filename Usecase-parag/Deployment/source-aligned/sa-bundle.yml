@@ -1,0 +1,14 @@
+version: v1beta
+name: sales360-bundle
+type: bundle
+tags:
+  - dataproduct
+  - customer360
+  - postgres
+description: Bundle for sales 360 demo with depot, scanner, flare, and soda
+layer: user
+
+bundle:
+  resources:
+    - id: sales360flare
+      file: /Users/paragkadam/Documents/workshop/Use_case1/Build/data-processing/sales360.yml
