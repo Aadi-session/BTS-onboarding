@@ -7,15 +7,15 @@ tags:
 description: This semantic model provides comprehensive insights for product affinity analysis.
 lens:
   compute: runnable-default
-  secrets:
-    - name: bitbucket-cred
-      allKeys: true
+  #secrets:
+    #- name: bitbucket-cred
+     # allKeys: true
   source:
     type: icebase
     name: postgresabc
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: https://github.com/Aadi-session/BTS-onboarding/tree/main/Usecase-kiran/build/semantic-model
+    lensBaseDir: BTS-onboarding/Usecase-kiran/build/semantic-model/models
     syncFlags:
       - --ref=main
 
