@@ -1,50 +1,266 @@
 tables:
   - name: sales_aggregate
-    sql: {{ load_sql('products') }}
-    description: "This table stores key details about the products."
+    sql: {{ load_sql('sales_aggregate') }}
+    description: Unified sales 360 dataset combining customer sales profile details, order transactions, and salesfact, salesreps, leads into a single source for analytics and reporting.
+    data_source: icebase
     public: true
 
-    joins:
-      - name: sales_fact
-        relationship: many_to_one
-        sql: "{TABLE.product_id}= {sales_fact.product_id}"
-
-    dimensions:   
-      - name: product_id
-        type: number
-        column: product_id
-        description: "The unique identifier for each product."
+    dimensions:
+      - name: customer_id
+        description: Unique identifier for the customer.
+        type: string
+        sql: customer_id
         primary_key: true
         public: true
 
+      - name: segment
+        description: customer segment such as retail, wholesale or premium
+        type: string
+        sql: segment
+        primary_key: true
+        public: true
+
+      - name: city
+        description: City associated with the customer.
+        type: string
+        sql: city
+
+      - name: state
+        description: state associated with the customer.
+        type: string
+        sql: state
+
+      - name: join_date
+        description: Date when the customer joined.
+        type: date
+        sql: join_date
+
+      - name: product_id
+        description: Unique identifier for the product.
+        type: string
+        sql: product_id
+        primary_key: true
+        public: true
 
       - name: product_name
+        description: Name of the product purchased by the customer.
         type: string
-        column: product_name
-        description: "Specifies the product name
+        sql: product_name
 
       - name: category
+        description: category of the product purchased by the customer
         type: string
-        column: category
-        description: "This defines product category."
-
-      - name: brand
-        type: string
-        column: brand
-        description: "Associated brand."
+        sql: category
 
       - name: unit_price
-        type: number
-        column: unit_price
-        description: "Unit price of product"
+        description: unit_price of product associated with the order
+        type: decimal
+        sql: unit_price
+
+      - name: sales_rep_id
+        description: Unique identifier for the sales_reps
+        type: string
+        sql: sales_rep_id
+        primary_key: true
+        public: true
+
+      - name: region
+        description: assigned region to sales representative
+        type: string
+        sql: region
+
+      - name: target_month
+        description: month of the target
+        type: decimal
+        sql: target_month
+
+      - name: target_revenue
+        description: revenue of the target
+        type: string
+        sql: target_revenue
+
+      - name: target_units
+        description: unit sales target
+        type: integer
+        sql: target_units
+
+      - name: target_orders
+        description: order target
+        type: integer
+        sql: target_orders
+
+      - name: order_time
+        description: Date when the order was placed.
+        type: time
+        sql: order_time
+
+      - name: order_id
+        description: Unique identifier for the sales fact.
+        type: string
+        sql: order_id
+
+      - name: order_data
+        description: date of sale 
+        type: date
+        sql: order_data
+
+      - name: store_id
+        description: store identifier
+        type: string
+        sql: store_id
+
+      - name: region
+        description: region of sale
+        type: string
+        sql: region  
+
+      - name: revenue
+        description: revenue amount
+        type: string
+        sql: revenue  
+
+      - name: quantity
+        description: units sold
+        type: string
+        sql: quantity  
+
+      - name: discount_amount
+        description: discount given
+        type: decimal
+        sql: discount_amount  
+
+      - name: cost_amount
+        description: cost of goods sold
+        type: decimal
+        sql: cost_amount  
+
+      - name: order_status
+        description: 
+        type: string
+        sql: order_status  
+
+    segments:
+      - name: date_range_filter
+        sql: "date({TABLE.date}) BETWEEN {start_date} AND {end_date}"
+        description: Filters records by a selected date range.
+
+      - name: region_filter
+        sql: "{TABLE.region} = {selected_region}"
+        description: Filters records by the selected region.
+
+      - name: sales_rep_filter
+        sql: "{TABLE.sales_rep_id} = {selected_sales_rep}"
+        description: Filters records by the selected sales representative.
+
+      - name: product_category_filter
+        sql: "{TABLE.product_category} = {selected_product_category}"
+        description: Filters records by product category.
+
+      - name: customer_segment_filter
+        sql: "{TABLE.customer_segment} = {selected_customer_segment}"
+        description: Filters records by customer segment.
+
+      - name: sales_rep_ranking_view
+        sql: "RANK() OVER (PARTITION BY region ORDER BY SUM(revenue) DESC)"
+        description: Shows sales rep ranking based on revenue.
+
+      - name: trend_chart_view
+        sql: "GROUP BY date({TABLE.date})"
+        description: Aggregates data over time for trend charts.
+
+      - name: region_breakdown_view
+        sql: "GROUP BY {TABLE.region}"
+        description: Shows revenue or KPI breakdown by region.
+
+      - name: product_breakdown_view
+        sql: "GROUP BY {TABLE.product_category}"
+        description: Shows revenue or KPI breakdown by product category.
+
+      - name: drill_into_sales_rep
+        sql: "{TABLE.sales_rep_id} = {selected_sales_rep}"
+        description: Allows drilling into a selected sales reps detailed records.
+
+      - name: month_over_month_comparison
+        sql: "EXTRACT(MONTH FROM {TABLE.date}) IN ({current_month}, {previous_month})"
+        description: Compares metrics for the current month versus the previous month.
 
     measures:
-      - name: total_products
-        sql: "COUNT( Distinct {product_id})"
+      - name: total_revenue
+        sql: amount
+        type: sum
+        description: Total revenue generated from all orders.
+
+      - name: total_orders
+        sql: order_id
+        type: count
+        description: Total number of orders.
+
+      - name: sales_volume
+        sql: quantity
+        type: sum
+        description: Total number of units sold by sales rep
+
+      - name: target_achievement_pct
+        sql: "(SUM(revenue) / target_revenue) * 100"
         type: number
-        description: "The total number of product."
+        description: Actual revenue as a percentage of target revenue. Computed at rep + month level; handle divide-by-zero.
 
-      
+      - name: average_deal_size
+        sql: "SUM(revenue) / COUNT(DISTINCT order_id)"
+        type: number
+        description: Average revenue per order.
 
+      - name: revenue_per_customer
+        sql: "SUM(revenue) / COUNT(DISTINCT customer_id)"
+        type: number
+        description: Average revenue per unique customer.
 
-    
+      - name: repeat_customer_rate
+        sql: "(COUNT(DISTINCT CASE WHEN order_count > 1 THEN customer_id END) / COUNT(DISTINCT customer_id)) * 100"
+        type: number
+        description: Percentage of customers with more than one order.
+
+      - name: conversion_rate
+        sql: "COUNT(DISTINCT CASE WHEN lead_status = 'Converted' OR converted_order_id IS NOT NULL THEN lead_id END) / COUNT(DISTINCT lead_id) * 100"
+        type: number
+        description: Percentage of leads converted into orders.
+
+      - name: month_over_month_revenue_growth
+        sql: "((current_month_revenue - previous_month_revenue) / previous_month_revenue) * 100"
+        type: number
+        description: Percentage change in revenue compared to previous month. Handle zero previous month revenue.
+
+      - name: gross_margin
+        sql: "SUM(revenue - cost_amount)"
+        type: sum
+        description: Revenue minus cost amount.
+
+      - name: gross_margin_percentage
+        sql: "(SUM(revenue - cost_amount) / SUM(revenue)) * 100"
+        type: number
+        description: Gross margin as a percentage of revenue.
+
+      - name: discount_pct
+        sql: "(SUM(discount_amount) / SUM(revenue)) * 100"
+        type: number
+        description: Percentage discount relative to revenue.
+
+      - name: top_products_by_rep
+        sql: "SUM(revenue)"
+        type: sum
+        description: Highest revenue-contributing products for each rep. Grouped by sales_rep_id and product_id.
+
+      - name: region_wise_performance
+        sql: "SUM(revenue)"
+        type: sum
+        description: Total revenue and target achievement by region. Grouped by region.
+
+      - name: sales_rep_rank
+        sql: "RANK() OVER (ORDER BY SUM(revenue) DESC)"
+        type: number
+        description: Rank of each sales rep based on revenue or target achievement.
+
+      - name: avg_orders_per_customer
+        sql: "COUNT(DISTINCT order_id) / COUNT(DISTINCT customer_id)"
+        type: number
+        description: Average number of orders per customer for a sales rep.
