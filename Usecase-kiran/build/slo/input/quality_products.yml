@@ -1,3 +1,4 @@
+
 name: products-quality-kb
 version: v1
 type: workflow
@@ -32,16 +33,28 @@ workflow:
               profile:
                 columns:
                   - include *
-              checks:
+             checks:
+                - sales_product_fk_violations = 0:
+                    sales_product_fk_violations query: |
+                      SELECT COUNT(DISTINCT s.product_id) AS sales_product_fk_violations
+                      FROM "icebase"."srp_analysis".sales_fact s
+                      LEFT JOIN "icebase"."srp_analysis".products p
+                        ON s.product_id = p.product_id
+                      WHERE s.product_id IS NOT NULL
+                        AND p.product_id IS NULL
+                    name: sales_fact product_id must exist in products
+                    attributes:
+                      category: Accuracy
+                      severity: high
                 - schema:
-                    name: Validate expected schema for products dataset
+                    name: Validate schema for products dataset
                     fail:
                       when wrong column type:
-                        product_id: integer
-                        product_name: character varying
-                        category: character varying
-                        brand: character varying
-                        unit_price: double
+                        product_id: varchar
+                        product_name: varchar
+                        category: varchar
+                        brand: varchar
+                        standard_price: double
                     attributes:
                       category: Schema
 
@@ -50,32 +63,40 @@ workflow:
                     attributes:
                       category: Completeness
 
+                - duplicate_count(product_id) = 0:
+                    name: Product ID should not be duplicated
+                    attributes:
+                      category: Uniqueness
+
                 - missing_count(product_name) = 0:
                     name: Product name should not be missing
                     attributes:
                       category: Completeness
 
                 - missing_count(category) = 0:
-                    name: Category should not be missing
+                    name: Product category should not be missing
                     attributes:
                       category: Completeness
 
-                - missing_count(brand) = 0:
-                    name: Brand should not be missing
-                    attributes:
-                      category: Completeness
-
-                - missing_count(unit_price) = 0:
-                    name: Unit price should not be missing
-                    attributes:
-                      category: Completeness
-
-                - invalid_count(unit_price) = 0:
-                    name: Unit Price should be valid and non-zero
-                    valid min: 0
+                - invalid_count(category) = 0:
+                    name: Product category should be in allowed values
+                    valid values:
+                      - Footwear
+                      - Apparel
+                      - Accessories
+                      - Equipment
                     attributes:
                       category: Validity
 
-                
+                - invalid_count(standard_price) = 0:
+                    name: Standard price should be positive
+                    valid min: 1
+                    attributes:
+                      category: Validity
 
-                
+                - avg_length(product_name) > 2:
+                    name: Average product name length should be reasonable
+                    attributes:
+                      category: Accuracy
+
+               
