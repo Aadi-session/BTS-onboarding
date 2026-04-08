@@ -33,7 +33,7 @@ workflow:
               profile:
                 columns:
                   - include *
-             checks:
+              checks:
                 - sales_product_fk_violations = 0:
                     sales_product_fk_violations query: |
                       SELECT COUNT(DISTINCT s.product_id) AS sales_product_fk_violations
