@@ -1,0 +1,42 @@
+name: sales-fact-quality
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+  - onboarding
+  - BTS
+description: Applying quality checks for the customer sales fact data
+
+workflow:
+  dag:
+    - name: sales-rep-perf-anlsys-quality
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:kiranschema/sales_fact
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate sales fact data
+                - duplicate_count(order_id) = 0:
+                    name: Sales fact table should not have any duplicate order_id
+                    attributes:
+                      category: Uniqueness
+
+               

@@ -1,0 +1,43 @@
+name: targets-quality-kb
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+  - onboarding
+  - targets-quality
+  - BTS
+description: Applying quality checks for the targets data
+
+workflow:
+  dag:
+    - name: kiran-targets
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:kiranschema/targets
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate targets data
+                - duplicate_count(sales_rep_id,target_month) = 0:
+                    name: No duplicate combination of sales_rep and target month.
+                    attributes:
+                      category: uniqueness
+
+               

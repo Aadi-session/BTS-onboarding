@@ -1,0 +1,93 @@
+name: customer-quality-kb
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+  - onboarding
+  - customer-quality-check
+  - BTS
+description: Applying quality checks for the customer dataset
+
+workflow:
+  dag:
+    - name: kiran-customer
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:kiranschema/customers
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate expected schema for customer dataset
+                    fail:
+                      when wrong column type:
+                        customer_id: integer
+                        customer_name: character varying
+                        segment: character varying
+                        city: character varying
+                        state: character varying
+                        join_date: timestamp without time zone
+                        email_id: character varying
+                    attributes:
+                      category: Schema
+
+                - missing_count(customer_id) = 0:
+                    name: Customer ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(email_id) = 0:
+                    name: Customer email should not be missing
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(customer_id) = 0:
+                    name: Customer ID should be valid and non-zero
+                    valid min: 0
+                    attributes:
+                      category: Validity
+
+                - duplicate_count(customer_id) = 0:
+                    name: Customer should not be duplicate
+                    attributes:
+                      category: Uniqueness
+
+                - missing_count(segment) = 0:
+                    name: Customer segment should be present.
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(segment) = 0:
+                    name: Customer segment should be in allowed list
+                    valid values:
+                      - Retail
+                      - wholesale
+                      - premium
+                    attributes:
+                      category: Validity
+
+                - missing_count(city) = 0:
+                    name: Customer city should be present.
+                    attributes:
+                      category: Completeness
+
+                - missing_count(state) = 0:
+                    name: Customer state should be present.
+                    attributes:
+                      category: Completeness

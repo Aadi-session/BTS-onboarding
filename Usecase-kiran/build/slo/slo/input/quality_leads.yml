@@ -1,0 +1,104 @@
+name: leads-quality-kb
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+  - onboarding
+  - leads-quality-check
+  - BTS
+description: Applying quality checks for the leads dataset
+
+workflow:
+  dag:
+    - name: kiran-leads
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO
+        stackSpec:
+          inputs:
+            - dataset: dataos://icebase:kiranschema/leads
+              options:
+                engine: minerva
+                clusterName: training
+              profile:
+                columns:
+                  - include *
+              checks:
+                - schema:
+                    name: Validate expected schema for leads dataset
+                    fail:
+                      when wrong column type:
+                        lead_id: integer
+                        created_date: timestamp without time zone
+                        sales_rep_id: character varying
+                        customer_id: character varying
+                        lead_source: character varying
+                        lead_status: character varying
+                        converted_order_id: character varying
+                    attributes:
+                      category: Schema
+
+                - missing_count(lead_id) = 0:
+                    name: Lead ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(customer_id) = 0:
+                    name: Customer ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(sales_rep_id) = 0:
+                    name: Sales Representative ID should not be missing
+                    attributes:
+                      category: Completeness
+
+                - missing_count(lead_source) = 0:
+                    name: Lead Source should not be missing
+                    attributes:
+                      category: Completeness
+
+                - invalid_count(lead_source) = 0:
+                    name: Lead source should be in allowed list
+                    valid values:
+                      - campaign
+                      - referral
+                      - walk-in
+                    attributes:
+                      category: Validity
+
+                - missing_count(lead_status) = 0:
+                    name: Lead status should not be missing
+                    attributes:
+                      category: Completeness
+                - invalid_count(lead_status) = 0:
+                    name: Lead status should be in allowed list
+                    valid values:
+                      - open
+                      - converted
+                      - lost
+                    attributes:
+                      category: Validity
+
+                - invalid_count(converted_order_id) = 0:
+                    name: Converted Order ID should be valid and non-zero
+                    valid min: 0
+                    attributes:
+                      category: Validity
+
+                - duplicate_count(converted_order_id) = 0:
+                    name: Converted Order ID should not be duplicate
+                    attributes:
+                      category: Uniqueness
+
+
+                
