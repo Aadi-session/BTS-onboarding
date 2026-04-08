@@ -6,7 +6,7 @@ tags:
 description: This bundle resource is for the product affinity Data Product.
 layer: "user"
 bundle:
-resources:
+ resources:
     - id: lens
       file: "Usecase-kiran/build/semantic-model/deployment.yml"
       workspace: public
