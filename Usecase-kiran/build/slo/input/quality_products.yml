@@ -37,8 +37,8 @@ workflow:
                 - sales_product_fk_violations = 0:
                     sales_product_fk_violations query: |
                       SELECT COUNT(DISTINCT s.product_id) AS sales_product_fk_violations
-                      FROM "icebase"."srp_analysis".sales_fact s
-                      LEFT JOIN "icebase"."srp_analysis".products p
+                      FROM "icebase"."kiranschema".sales_fact s
+                      LEFT JOIN "icebase"."kiranschema".products p
                         ON s.product_id = p.product_id
                       WHERE s.product_id IS NOT NULL
                         AND p.product_id IS NULL
