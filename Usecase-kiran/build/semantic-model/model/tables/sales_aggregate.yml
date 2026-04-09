@@ -54,7 +54,7 @@ tables:
 
       - name: unit_price
         description: unit_price of product associated with the order
-        type: decimal
+        type: number
         sql: unit_price
 
       - name: sales_rep_id
@@ -71,7 +71,7 @@ tables:
 
       - name: target_month
         description: month of the target
-        type: decimal
+        type: number
         sql: target_month
 
       - name: target_revenue
@@ -81,13 +81,13 @@ tables:
 
       - name: target_units
         description: unit sales target
-        type: integer
+        type: number
         sql: target_units
 
       - name: target_orders
         description: order target
         type: integer
-        sql: target_orders
+        sql: number
 
       - name: order_time
         description: Date when the order was placed.
@@ -101,7 +101,7 @@ tables:
 
       - name: order_data
         description: date of sale
-        type: date
+        type: time
         sql: order_data
 
       - name: store_id
@@ -126,12 +126,12 @@ tables:
 
       - name: discount_amount
         description: discount given
-        type: decimal
+        type: number
         sql: discount_amount  
 
       - name: cost_amount
         description: cost of goods sold
-        type: decimal
+        type: number
         sql: cost_amount  
 
       - name: order_status
