@@ -17,7 +17,7 @@ views:
           - target_orders
           - target_units
     tables:
-      - join_path: sales_rep_360_dataset
+      - join_path: sales_aggregate
         prefix: true
         includes:
           - sales_rep_id
