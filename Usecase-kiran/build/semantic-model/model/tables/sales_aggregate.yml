@@ -99,10 +99,10 @@ tables:
         type: string
         sql: order_id
 
-      - name: order_data
+      - name: order_date
         description: date of sale 
         type: time
-        sql: order_data
+        sql: order_date
 
       - name: store_id
         description: store identifier
