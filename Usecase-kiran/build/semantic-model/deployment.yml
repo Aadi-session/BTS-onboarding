@@ -10,16 +10,12 @@ lens:
   #secrets:
     #- name: bitbucket-cred
      # allKeys: true
-  #source:
-    #type: icebase
-    #name: postgresabc
   source:
-    type: minerva # minerva, themis and depot
-    name: training #  service name
-    catalog: thirdparty01
+    type: icebase
+    name: postgresabc
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: BTS-onboarding/Usecase-kiran/build/semantic-model/model
+    lensBaseDir: BTS-onboarding/Usecase-kiran/build/semantic-model/models
     syncFlags:
       - --ref=main
 
