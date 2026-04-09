@@ -81,12 +81,12 @@ tables:
 
       - name: target_units
         description: unit sales target
-        type: integer
+        type: number
         sql: target_units
 
       - name: target_orders
         description: order target
-        type: integer
+        type: number
         sql: target_orders
 
       - name: order_time
