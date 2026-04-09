@@ -135,7 +135,7 @@ tables:
         sql: cost_amount  
 
       - name: order_status
-        description: 
+        description: order status
         type: string
         sql: order_status  
 
