@@ -141,7 +141,7 @@ tables:
 
     segments:
       - name: date_range_filter
-        sql: "date({TABLE.date}) BETWEEN {start_date} AND {end_date}"
+        sql: "order_date({TABLE.order_date}) BETWEEN {start_date} AND {end_date}"
         description: Filters records by a selected date range.
 
       - name: region_filter
