@@ -1,12 +1,12 @@
 version: v1
-name: wf-sales-classification
+name: sales_rep_classification
 type: workflow
 tags:
   - analytics
 description: Build sales_rep_classification from the sales_360_dataset.
 workflow:
   dag:
-    - name: dg-sales-360-classification
+    - name: sales_rep_classification
       spec:
         tags:
           - analytics

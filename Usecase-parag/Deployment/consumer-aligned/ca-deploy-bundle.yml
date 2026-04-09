@@ -9,10 +9,10 @@ layer: user
 bundle:
   resources:
     - id: lens
-      file: /Users/paragkadam/Documents/workshop/BTS-onboarding/Use_case1/Build/semantic-model/deployment.yaml
+      file: BTS-onboarding\Usecase-parag\Build\semantic-model\deployment.yaml
       workspace: public
 
     - id: quality-check
-      file: /Users/paragkadam/Documents/workshop/BTS-onboarding/Use_case1/Build/slo/output/customer360.yml
+      file: BTS-onboarding\Usecase-parag\Build\slo\output\customer360.yml
       workspace: public
       

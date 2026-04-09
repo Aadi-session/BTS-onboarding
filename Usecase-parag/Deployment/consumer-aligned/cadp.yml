@@ -5,7 +5,7 @@ type: data
 tags:
   - BTS onboarding
   - sales representative data
-description: Identifies cross-sell opportunities through product affinity analysis, improving recommendations by understanding product relationships.
+description:  Analyze the sales target and find achievement percentage.
 refs:
   - title: 'Sales Workspace Info'
     href: https://dataos.info/interfaces/cli/command_reference/#workspace
@@ -13,7 +13,7 @@ refs:
 v1beta:
   data:
     meta:
-      title: Sales 360 Analysis parag
+      title: sales360analysis-parag
       sourceCodeUrl: https://github.com/Aadi-session/BTS-onboarding/blob/main/
       trackerUrl: https://rubikai.atlassian.net/browse
 
