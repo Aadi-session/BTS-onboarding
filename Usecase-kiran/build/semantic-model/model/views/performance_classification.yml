@@ -17,7 +17,7 @@ views:
           - target_orders
           - target_units
     tables:
-      - join_path: targets
+      - join_path: sales_rep_360_dataset
         prefix: true
         includes:
           - sales_rep_id
@@ -27,9 +27,3 @@ views:
           - target_achievement_percent
           - performance_classification
           
-
-      - join_path: products
-        prefix: true
-        includes:
-          - category
-          - name
