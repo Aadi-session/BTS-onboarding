@@ -54,7 +54,7 @@ tables:
 
       - name: unit_price
         description: unit_price of product associated with the order
-        type: number
+        type: decimal
         sql: unit_price
 
       - name: sales_rep_id
@@ -71,7 +71,7 @@ tables:
 
       - name: target_month
         description: month of the target
-        type: number
+        type: decimal
         sql: target_month
 
       - name: target_revenue
@@ -81,12 +81,12 @@ tables:
 
       - name: target_units
         description: unit sales target
-        type: number
+        type: integer
         sql: target_units
 
       - name: target_orders
         description: order target
-        type: number
+        type: integer
         sql: target_orders
 
       - name: order_time
@@ -99,10 +99,10 @@ tables:
         type: string
         sql: order_id
 
-      - name: order_date
-        description: date of sale 
-        type: time
-        sql: order_date
+      - name: order_data
+        description: date of sale
+        type: date
+        sql: order_data
 
       - name: store_id
         description: store identifier
@@ -126,63 +126,18 @@ tables:
 
       - name: discount_amount
         description: discount given
-        type: number
+        type: decimal
         sql: discount_amount  
 
       - name: cost_amount
         description: cost of goods sold
-        type: number
+        type: decimal
         sql: cost_amount  
 
       - name: order_status
         description: order status
         type: string
         sql: order_status  
-
-    segments:
-      - name: date_range_filter
-        sql: "order_date({TABLE.order_date}) BETWEEN {start_date} AND {end_date}"
-        description: Filters records by a selected date range.
-
-      - name: region_filter
-        sql: "{TABLE.region} = {selected_region}"
-        description: Filters records by the selected region.
-
-      - name: sales_rep_filter
-        sql: "{TABLE.sales_rep_id} = {selected_sales_rep}"
-        description: Filters records by the selected sales representative.
-
-      - name: product_category_filter
-        sql: "{TABLE.product_category} = {selected_product_category}"
-        description: Filters records by product category.
-
-      - name: customer_segment_filter
-        sql: "{TABLE.customer_segment} = {selected_customer_segment}"
-        description: Filters records by customer segment.
-
-      - name: sales_rep_ranking_view
-        sql: "RANK() OVER (PARTITION BY region ORDER BY SUM(revenue) DESC)"
-        description: Shows sales rep ranking based on revenue.
-
-      - name: trend_chart_view
-        sql: "GROUP BY date({TABLE.date})"
-        description: Aggregates data over time for trend charts.
-
-      - name: region_breakdown_view
-        sql: "GROUP BY {TABLE.region}"
-        description: Shows revenue or KPI breakdown by region.
-
-      - name: product_breakdown_view
-        sql: "GROUP BY {TABLE.product_category}"
-        description: Shows revenue or KPI breakdown by product category.
-
-      - name: drill_into_sales_rep
-        sql: "{TABLE.sales_rep_id} = {selected_sales_rep}"
-        description: Allows drilling into a selected sales reps detailed records.
-
-      - name: month_over_month_comparison
-        sql: "EXTRACT(MONTH FROM {TABLE.date}) IN ({current_month}, {previous_month})"
-        description: Compares metrics for the current month versus the previous month.
 
     measures:
       - name: total_revenue
@@ -216,7 +171,7 @@ tables:
         description: Average revenue per unique customer.
 
       - name: repeat_customer_rate
-        sql: "(COUNT(DISTINCT CASE WHEN order_count > 1 THEN customer_id END) / COUNT(DISTINCT customer_id)) * 100"
+        sql: "(COUNT(DISTINCT CASE WHEN total_orders > 1 THEN customer_id END) / COUNT(DISTINCT customer_id)) * 100"
         type: number
         description: Percentage of customers with more than one order.
 
@@ -225,10 +180,10 @@ tables:
         type: number
         description: Percentage of leads converted into orders.
 
-      - name: month_over_month_revenue_growth
-        sql: "((current_month_revenue - previous_month_revenue) / previous_month_revenue) * 100"
-        type: number
-        description: Percentage change in revenue compared to previous month. Handle zero previous month revenue.
+     # - name: month_over_month_revenue_growth
+      #  sql: "((current_month_revenue - previous_month_revenue) / previous_month_revenue) * 100"
+       # type: number
+        #description: Percentage change in revenue compared to previous month. Handle zero previous month revenue.
 
       - name: gross_margin
         sql: "SUM(revenue - cost_amount)"
