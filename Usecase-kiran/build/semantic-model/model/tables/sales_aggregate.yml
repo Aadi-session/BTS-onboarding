@@ -86,7 +86,7 @@ tables:
 
       - name: target_orders
         description: order target
-        type: integer
+        type: number
         sql: number
 
       - name: order_time
