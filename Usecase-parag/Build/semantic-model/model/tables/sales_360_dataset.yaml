@@ -54,7 +54,7 @@ tables:
 
       - name: unit_price
         description: unit_price of product associated with the order
-        type: integer
+        type: number
         sql: unit_price
 
       - name: sales_rep_id
