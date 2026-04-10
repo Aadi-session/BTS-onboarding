@@ -13,13 +13,13 @@ lens:
   source:
     type: minerva
     name: training
-    catalog: thirdparty01
+    catalog: icebase
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: BTS-onboarding/Usecase-parag/build/semantic-model/model
+    lensBaseDir: BTS-onboarding/Usecase-parag/Build/semantic-model/model
     syncFlags:
       - --ref=main
-
+ 
   api:   # optional
     replicas: 1 # optional
     logLevel: Info  # optional
