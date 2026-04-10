@@ -141,24 +141,24 @@ tables:
 
     segments:
       - name: date_range_filter
-        sql: "date({TABLE.order_date}) BETWEEN {start_date} AND {end_date}"
+        sql: "date({TABLE.order_date}) BETWEEN {order_date} AND {order_date}"
         description: Filters records by a selected date range.
 
       - name: region_filter
-        sql: "{TABLE.region} = {selected_region}"
+        sql: "{TABLE.region} = {region}"
         description: Filters records by the selected region.
 
       - name: sales_rep_filter
-        sql: "{TABLE.sales_rep_id} = {selected_sales_rep}"
+        sql: "{TABLE.sales_rep_id} = {sales_rep_id}"
         description: Filters records by the selected sales representative.
 
-      - name: product_category_filter
-        sql: "{TABLE.product_category} = {selected_product_category}"
-        description: Filters records by product category.
+      # - name: product_category_filter
+      #   sql: "{TABLE.product_category} = {selected_product_category}"
+      #   description: Filters records by product category.
 
-      - name: customer_segment_filter
-        sql: "{TABLE.customer_segment} = {selected_customer_segment}"
-        description: Filters records by customer segment.
+      # - name: customer_segment_filter
+      #   sql: "{TABLE.customer_segment} = {selected_customer_segment}"
+      #   description: Filters records by customer segment.
 
       - name: sales_rep_ranking_view
         sql: "RANK() OVER (PARTITION BY region ORDER BY SUM(revenue) DESC)"
@@ -172,17 +172,17 @@ tables:
         sql: "GROUP BY {TABLE.region}"
         description: Shows revenue or KPI breakdown by region.
 
-      - name: product_breakdown_view
-        sql: "GROUP BY {TABLE.product_category}"
-        description: Shows revenue or KPI breakdown by product category.
+      # - name: product_breakdown_view
+      #   sql: "GROUP BY {TABLE.product_category}"
+      #   description: Shows revenue or KPI breakdown by product category.
 
       - name: drill_into_sales_rep
-        sql: "{TABLE.sales_rep_id} = {selected_sales_rep}"
+        sql: "{TABLE.sales_rep_id} = {sales_rep_id}"
         description: Allows drilling into a selected sales reps detailed records.
 
-      - name: month_over_month_comparison
-        sql: "EXTRACT(MONTH FROM {TABLE.order_date}) IN ({current_month}, {previous_month})"
-        description: Compares metrics for the current month versus the previous month.
+      # - name: month_over_month_comparison
+      #   sql: "EXTRACT(MONTH FROM {TABLE.order_date}) IN ({current_month}, {previous_month})"
+      #   description: Compares metrics for the current month versus the previous month.
 
     measures:
       - name: total_revenue
