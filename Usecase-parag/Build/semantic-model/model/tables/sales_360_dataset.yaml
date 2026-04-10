@@ -101,7 +101,7 @@ tables:
 
       - name: order_data
         description: date of sale 
-        type: date
+        type: number
         sql: order_data
 
       - name: store_id
