@@ -16,7 +16,7 @@ lens:
     catalog: icebase
   repo:
     url: https://github.com/Aadi-session/BTS-onboarding
-    lensBaseDir: BTS-onboarding/Usecase-parag/Build/semantic-model/model
+    lensBaseDir: BTS-onboarding/Usecase-parag/build/semantic-model/model
     syncFlags:
       - --ref=main
  
