@@ -32,7 +32,7 @@ tables:
 
       - name: join_date
         description: Date when the customer joined.
-        type: date
+        type: time
         sql: join_date
 
       - name: product_id
