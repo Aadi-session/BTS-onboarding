@@ -99,10 +99,10 @@ tables:
         type: string
         sql: order_id
 
-      - name: order_data
+      - name: order_date
         description: date of sale 
         type: number
-        sql: order_data
+        sql: order_date
 
       - name: store_id
         description: store identifier
@@ -141,7 +141,7 @@ tables:
 
     segments:
       - name: date_range_filter
-        sql: "date({TABLE.date}) BETWEEN {start_date} AND {end_date}"
+        sql: "date({TABLE.order_date}) BETWEEN {start_date} AND {end_date}"
         description: Filters records by a selected date range.
 
       - name: region_filter
@@ -165,7 +165,7 @@ tables:
         description: Shows sales rep ranking based on revenue.
 
       - name: trend_chart_view
-        sql: "GROUP BY date({TABLE.date})"
+        sql: "GROUP BY date({TABLE.order_date})"
         description: Aggregates data over time for trend charts.
 
       - name: region_breakdown_view
@@ -181,7 +181,7 @@ tables:
         description: Allows drilling into a selected sales reps detailed records.
 
       - name: month_over_month_comparison
-        sql: "EXTRACT(MONTH FROM {TABLE.date}) IN ({current_month}, {previous_month})"
+        sql: "EXTRACT(MONTH FROM {TABLE.order_date}) IN ({current_month}, {previous_month})"
         description: Compares metrics for the current month versus the previous month.
 
     measures:
