@@ -71,7 +71,7 @@ tables:
 
       - name: target_month
         description: month of the target
-        type: decimal
+        type: number
         sql: target_month
 
       - name: target_revenue
@@ -126,12 +126,12 @@ tables:
 
       - name: discount_amount
         description: discount given
-        type: decimal
+        type: number
         sql: discount_amount  
 
       - name: cost_amount
         description: cost of goods sold
-        type: decimal
+        type: number
         sql: cost_amount  
 
       - name: order_status
