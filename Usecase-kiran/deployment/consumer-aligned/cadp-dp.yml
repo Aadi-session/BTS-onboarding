@@ -44,7 +44,7 @@ v1beta:
 
     outputs:
       - refType: dataos
-        ref: dataos://icebase:kiranschema/sales-performance-classification     # Verify the Depot name for your training instance
+        ref: dataos://icebase:kiranschema/sales-aggregate    # Verify the Depot name for your training instance
 
     ports:
       lens:
