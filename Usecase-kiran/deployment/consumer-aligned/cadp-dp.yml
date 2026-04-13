@@ -22,29 +22,10 @@ v1beta:
       ref: bundle:v1beta:salesperformance-bundle-kb
     inputs:
       - refType: dataos
-        ref: dataos://icebase:kiranschema/customers
-
-      - refType: dataos
-        ref: dataos://icebase:kiranschema/targets
-
-      - refType: dataos
-        ref: dataos://icebase:kiranschema/leads
-
-      - refType: dataos
-        ref: dataos://icebase:kiranschema/products
-      
-      - refType: dataos
-        ref: dataos://icebase:kiranschema/sales_fact
-      
-      - refType: dataos
-        ref: dataos://icebase:kiranschema/sales_reps
-      
-      - refType: dataos
-        ref: dataos://icebase:kiranschema/sales_rep_360_dataset
-
+        ref: dataos://icebase:kiranschema/sales-aggregate
     outputs:
       - refType: dataos
-        ref: dataos://icebase:kiranschema/sales-aggregate    # Verify the Depot name for your training instance
+        ref: dataos://icebase:kiranschema/sales_rep_classification   # Verify the Depot name for your training instance
 
     ports:
       lens:
