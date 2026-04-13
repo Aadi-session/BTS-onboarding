@@ -13,6 +13,15 @@ workflow:
         stack: flare:7.0
         compute: runnable-default
         stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 1
+            memory: 2000m
+          executor:
+            coreLimit: 2000m
+            cores: 1
+            instances: 1
+            memory: 2000m        
           job:
             explain: true
             inputs:
