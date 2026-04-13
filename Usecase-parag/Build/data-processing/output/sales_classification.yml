@@ -43,38 +43,35 @@ workflow:
                   - name: Target_avhievement_calc
                     sql: |
                       SELECT
-                      sales_rep_id,
-                      CASEs
-                          WHEN SUM(target_revenue) = 0 THEN 0
-                          ELSE (SUM(sale_revenue) / SUM(target_revenue)) * 100
-                      END AS target_achievement
-                      FROM sales_data GROUP BY sales_rep_id
-                      ORDER BY target_achievement DESC;
+                          sales_rep_id,
+                          CASE
+                              WHEN SUM(target_revenue) = 0 THEN 0
+                              ELSE (SUM(sale_revenue) / SUM(target_revenue)) * 100
+                          END AS target_achievement
+                      FROM sales_data
+                      GROUP BY sales_rep_id;
  
                   - name: build_sales_classification
                     sql: |
                       SELECT
-                      t.sales_rep_id,
-                      CASE
-                          WHEN ta.target_achievement < 70 THEN 'Underperformer'
-                          WHEN ta.target_achievement BETWEEN 70 AND 99 THEN 'Needs attention'
-                          WHEN ta.target_achievement BETWEEN 100 AND 119 THEN 'Achiever'
-                          ELSE 'High performer'
-                      END AS sales_rep_classification
+                          t.sales_rep_id,
+                          CASE
+                              WHEN ta.target_achievement < 70 THEN 'Underperformer'
+                              WHEN ta.target_achievement BETWEEN 70 AND 99 THEN 'Needs attention'
+                              WHEN ta.target_achievement BETWEEN 100 AND 119 THEN 'Achiever'
+                              ELSE 'High performer'
+                          END AS sales_rep_classification
                       FROM sales_data t
                       LEFT JOIN Target_avhievement_calc ta
-                          ON t.sales_rep_id = ta.sales_rep_id
-                      ORDER BY
-                          sales_rep_classification;
+                          ON t.sales_rep_id = ta.sales_rep_id;
  
                   - name: Tire_classification
                     sql: |
                       SELECT
-                      t.sales_rep_id,
-                      s.sales_rep_classification
+                          t.sales_rep_id,
+                          s.sales_rep_classification
                       FROM sales_data t
-                      left JOIN build_sales_classification s
+                      LEFT JOIN build_sales_classification s
                           ON t.sales_rep_id = s.sales_rep_id
-                      ORDER BY
-                          t.sales_rep_id;   
+                      ORDER BY t.sales_rep_id;
  
