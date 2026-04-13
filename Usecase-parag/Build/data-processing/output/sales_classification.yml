@@ -44,7 +44,7 @@ workflow:
                     sql: |
                       SELECT
                       sales_rep_id,
-                      CASE
+                      CASEs
                           WHEN SUM(target_revenue) = 0 THEN 0
                           ELSE (SUM(sale_revenue) / SUM(target_revenue)) * 100
                       END AS target_achievement
@@ -62,7 +62,19 @@ workflow:
                           ELSE 'High performer'
                       END AS sales_rep_classification
                       FROM sales_data t
-                      JOIN Target_avhievement_calc ta
+                      LEFT JOIN Target_avhievement_calc ta
                           ON t.sales_rep_id = ta.sales_rep_id
                       ORDER BY
                           sales_rep_classification;
+ 
+                  - name: Tire_classification
+                    sql: |
+                      SELECT
+                      t.sales_rep_id,
+                      s.sales_rep_classification
+                      FROM sales_data t
+                      left JOIN build_sales_classification s
+                          ON t.sales_rep_id = s.sales_rep_id
+                      ORDER BY
+                          t.sales_rep_id;   
+ 
