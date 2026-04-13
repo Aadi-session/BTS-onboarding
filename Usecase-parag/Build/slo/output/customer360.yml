@@ -6,7 +6,7 @@ tags:
   - soda-checks
 description: Applying quality checks for the sales 360 joined dataset
 workspace: public
-
+ 
 workflow:
   dag:
     - name: soda-sales360-quality
@@ -35,69 +35,43 @@ workflow:
                     name: Valinumber expected schema for customer 360 dataset
                     fail:
                       when wrong column type:
-                        customer_id: number
-                        customer_name: string
-                        segment: string
-                        phone: bigint
-                        city: string
-                        state: number
-                        join_number: number
-                        lead_id: string
-                        created_number: number
-                        sales_rep_id: string
-                        lead_source: string
-                        lead_status: string
-                        converted_order_id: string
-                        product_id: string
-                        product_name: string
-                        category: string
-                        brand: string
-                        order_id: string
-                        store_id: string
-                        region: string
-                        revenue: number
-                        quantity: number
-                        discount_amount: number
-                        cost_amount: number
-                        order_status: string
-                        target_month: string
-                        target_revenue: number
-                        target_units: number 
-                        target_orders: number
-                        sales_rep_name: string
-                        manager_name: string 
-                        joining_number: number
+                        customer_id: integer
+                        order_id: integer
+                        sales_rep_id: integer
+                        customer_join_date: timestamp without time zone
+                        rep_join_date: timestamp without time zone
+                        converted_order_id: integer
                     attributes:
                       category: Schema
-
+ 
                 - duplicate_count(order_id) = 0:
                     name: Order IDs should not be duplicated
                     attributes:
                       category: Uniqueness
-
+ 
                 - missing_count(sales_rep_id) = 0:
                     name: Sales Rep ID should not be missing in completed transactions
                     filter: order_status = 'completed'
                     attributes:
                       category: Completeness
-
+ 
                 # - unique_count(sales_rep_id, target_month) = 0:
                 #     name: Target table should contain unique rep-month pairs
                 #     attributes:
                 #       category: Uniqueness
-
+ 
                 - invalid_count(target_revenue) > 0:
                     name: Revenue should not be negative
                     valid min: 0
                     attributes:
                       category: Validity
-
+ 
                 - invalid_count(quantity) > 0:
                     name: Quantity should not be negative
                     valid min: 0
                     attributes:
                       category: Validity
-
+ 
                 # - sales_product_fk_violations = 0:
                 #     sales_product_fk_violations query: |
                 #         SELECT COUNT(DISTINCT s.product_id) AS sales_product_fk_violations
@@ -110,7 +84,7 @@ workflow:
                 #         attributes:
                 #           category: Accuracy
                 #             severity: high
-
+ 
                 # - sales_customer_fk_violations = 0:
                 #     sales_customer_fk_violations query: |
                 #       SELECT COUNT(DISTINCT s.customer_id) AS sales_customer_fk_violations
@@ -123,7 +97,7 @@ workflow:
                 #           attributes:
                 #             category: Accuracy
                 #             severity: high
-
+ 
                 # - sales_region_consistency_violations = 0:
                 #     sales_region_consistency_violations query: |
                 #       SELECT COUNT(*) AS sales_region_consistency_violations
@@ -137,7 +111,7 @@ workflow:
                 #     attributes:
                 #       category: Accuracy
                 #       severity: high
-
+ 
                 # - lead_conversion_mapping = 0:
                 #     lead_conversion_mapping_violations query: |
                 #       SELECT COUNT(DISTINCT l.lead_id) AS lead_conversion_mapping
@@ -150,3 +124,4 @@ workflow:
                 #     attributes:
                 #       category: Accuracy
                 #       severity: high
+ 
