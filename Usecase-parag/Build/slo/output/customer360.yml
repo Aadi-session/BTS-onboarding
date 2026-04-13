@@ -86,7 +86,7 @@ workflow:
                 #     attributes:
                 #       category: Uniqueness
 
-                - invalid_count(revenue) > 0:
+                - invalid_count(target_revenue) > 0:
                     name: Revenue should not be negative
                     valid min: 0
                     attributes:
