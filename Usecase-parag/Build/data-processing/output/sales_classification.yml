@@ -1,12 +1,12 @@
+name: salesrepclassification
 version: v1
-name: sales_rep_classification
 type: workflow
 tags:
   - analytics
 description: Build sales_rep_classification from the sales_360_dataset.
 workflow:
   dag:
-    - name: sales_rep_classification
+    - name: salesrepclassification
       spec:
         tags:
           - analytics
@@ -21,7 +21,7 @@ workflow:
             coreLimit: 2000m
             cores: 1
             instances: 1
-            memory: 2000m        
+            memory: 2000m
           job:
             explain: true
             inputs:
@@ -44,13 +44,13 @@ workflow:
                     sql: |
                       SELECT
                       sales_rep_id,
-                      CASE 
+                      CASE
                           WHEN SUM(target_revenue) = 0 THEN 0
-                          ELSE (SUM(revenue) / SUM(target_revenue)) * 100
-                      END AS target_achievement_percent
-                      FROM target GROUP BY sales_rep_id
-                      ORDER BY target_achievement_percent DESC;
-
+                          ELSE (SUM(sale_revenue) / SUM(target_revenue)) * 100
+                      END AS target_achievement
+                      FROM sales_data GROUP BY sales_rep_id
+                      ORDER BY target_achievement DESC;
+ 
                   - name: build_sales_classification
                     sql: |
                       SELECT
@@ -61,7 +61,7 @@ workflow:
                           WHEN ta.target_achievement BETWEEN 100 AND 119 THEN 'Achiever'
                           ELSE 'High performer'
                       END AS sales_rep_classification
-                      FROM target t
+                      FROM sales_data t
                       JOIN Target_avhievement_calc ta
                           ON t.sales_rep_id = ta.sales_rep_id
                       ORDER BY
