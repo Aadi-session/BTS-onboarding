@@ -1,0 +1,52 @@
+name: uc1-input
+version: v1
+type: workflow  
+tags:
+  - sales-performance
+  - BTS Onboarding
+  - Use Case 1
+description: Ingesting customer data from azure blob storage into icebase
+workflow:
+  dag:
+    - name: uc1-wf-input
+      spec:
+        tags:
+          - sales-performance
+        stack: flare:7.0
+        compute: runnable-default
+        stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 1
+            memory: 2000m
+          executor:
+            coreLimit: 2000m
+            cores: 1
+            instances: 1
+            memory: 2000m
+          job:
+            explain: true 
+            logLevel: INFO
+            inputs:
+              - name: dim_customer
+                dataset: dataos://thirdparty01:srp_analysis/customers.csv?acl=rw
+                format: csv
+                options:
+                  inferSchema: true  
+            steps:
+              - sequence:
+                  - name: final
+                    sql: >
+                      SELECT
+                          *,input_file_name() as source_file_name
+                      FROM dim_customer
+            outputs:
+              - name: final
+                dataset: dataos://icebase:sagarchema/dim_customer?acl=rw   # change the schema name 
+                format: Iceberg
+                description: customers data
+                options:
+                  saveMode: overwrite
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
