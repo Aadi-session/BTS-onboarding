@@ -36,10 +36,10 @@ workflow:
                     fail:
                       when wrong column type:
                         customer_id: number
-                        customer_name: varchar
-                        segment: varchar
+                        customer_name: string
+                        segment: string
                         phone: bigint
-                        city: varchar
+                        city: string
                         state: number
                         join_number: number
                         lead_id: string
