@@ -1,0 +1,66 @@
+
+name: salesrepclassification
+version: v1
+type: workflow
+tags:
+  - analytics
+description: Build sales_rep_classification from the sales_360_dataset.
+workflow:
+  dag:
+    - name: salesrepclassification
+      spec:
+        tags:
+          - analytics
+        stack: flare:7.0
+        compute: runnable-default
+        stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 1
+            memory: 2000m
+          executor:
+            coreLimit: 2000m
+            cores: 1
+            instances: 1
+            memory: 2000m
+          job:
+            explain: true
+            inputs:
+              - name: sales_data
+                dataset: dataos://icebase:kiranschema/sales_rep_360_dataset?acl=r
+                format: Iceberg
+            outputs:
+              - name: Tire_classification
+                dataset: dataos://icebase:kiranschema/sales_rep_classification?acl=rw
+                format: Iceberg
+                title: Tire classification
+                options:
+                  saveMode: overwrite
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+            steps:
+              - sequence:
+                  - name: Tire_classification
+                    sql: |
+                      WITH Target_avhievement_calc AS (
+                          SELECT
+                              sales_rep_id,
+                              CASE
+                                  WHEN SUM(target_revenue) = 0 THEN 0
+                                  ELSE (SUM(sale_revenue) / SUM(target_revenue)) * 100
+                              END AS target_achievement
+                          FROM sales_data
+                          GROUP BY sales_rep_id
+                      )
+                      SELECT
+                          sales_rep_id,
+                          CASE
+                              WHEN target_achievement < 70 THEN 'Underperformer'
+                              WHEN target_achievement BETWEEN 70 AND 99 THEN 'Needs attention'
+                              WHEN target_achievement BETWEEN 100 AND 119 THEN 'Achiever'
+                              ELSE 'High performer'
+                          END AS sales_rep_classification
+                      FROM Target_avhievement_calc
+                      ORDER BY sales_rep_id
+                      LIMIT 100;
